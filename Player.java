@@ -45,7 +45,7 @@ class Player extends CircularObject {
     }
 
     public void setXPos(double XPos) {
-        this.xPos += xPos;
+        this.xPos = xPos;
     }
     public void setYPos(double YPos) {
         this.yPos = yPos;
