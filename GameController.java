@@ -25,6 +25,7 @@ class GameController {
         frame.add(gamePanel);
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        gamePanel.startRenderLoop();
     }
 
     public static void main(String[] args) {

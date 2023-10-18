@@ -1,40 +1,50 @@
-
-
 class Player extends CircularObject {
-    private int radius;
-    private int xPos;
-    private int yPos;
+    private double radius;
+    private double xPos;
+    private double yPos;
+    private double xDelta = 10;
+    private double yDelta = 10;
 
-    Player(int radius, int xPos, int yPos) {
+    Player(double radius, double xPos, double yPos) {
         this.radius = radius;
         this.xPos = xPos;
         this.yPos = yPos;
     }
 
-    Player(int radius) {
+    Player(double radius) {
         this.radius = radius;
         this.xPos = 1280 / 2;
         this.yPos = 720 / 2;
     }
 
-    public int getRadius() {
+    public double getRadius() {
         return radius;
     }
 
-    public int getXPos() {
+    public double getXPos() {
         return xPos;
     }
 
-    public int getYPos() {
+    public double getYPos() {
         return yPos;
     }
-    
-    public void updatePos(int changeX, int changeY) {
-        this.xPos += changeX;
-        this.yPos += changeY;
+
+    public double getXDelta() {
+        return xDelta;
     }
 
-    public void setPos(int x, int y) {
+    public double getYDelta() {
+        return yDelta;
+    }
+    
+    public void setXPos(double changeX) {
+        this.xPos += changeX * xDelta;
+    }
+    public void setYPos(double changeY) {
+        this.yPos += changeY * yDelta;
+    }
+
+    public void setPos(double x, double y) {
         this.xPos = x;
         this.yPos = y;
     }

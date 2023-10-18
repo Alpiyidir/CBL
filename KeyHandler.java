@@ -1,6 +1,6 @@
 import java.awt.event.*;
 
-public class KeyHandler implements KeyListener {
+public class KeyHandler implements KeyListener{
     
     private boolean rightPressed, leftPressed, upPressed, downPressed;
 
@@ -49,7 +49,7 @@ public class KeyHandler implements KeyListener {
         return new boolean[]{upPressed, downPressed, leftPressed, rightPressed};
     }
 
-    public double[] getCurrentDirectionVector() {
+    public double[] getCurrentUnitDirectionVector() {
         double[] directionVector = new double[2];
         if (!(upPressed && downPressed)) {
             if (upPressed) {
@@ -67,11 +67,11 @@ public class KeyHandler implements KeyListener {
             }
         }
 
-        double magnitude = 0;
+        double sum = 0;
         for (int i = 0; i < directionVector.length; i++) {
-            magnitude += Math.pow(directionVector[i], 2);
+            sum += Math.pow(directionVector[i], 2);
         }
-        magnitude = Math.pow(magnitude, 1 / 2);
+        double magnitude = Math.pow(sum, 1 / 2);
         for (int i = 0; i < directionVector.length; i++) {
             directionVector[i] /= magnitude;
         }
