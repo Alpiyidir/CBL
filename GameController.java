@@ -14,7 +14,7 @@ class GameController {
         this.keyHandler = new KeyHandler();
     }
 
-    void buildGUI() {
+    void startGame() {
         JFrame frame = new JFrame ("Game Window");
 
         frame.addKeyListener(new KeyHandler());
@@ -25,10 +25,10 @@ class GameController {
         frame.add(gamePanel);
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        gamePanel.startRenderLoop();
+        gamePanel.startGameThread();
     }
 
     public static void main(String[] args) {
-        new GameController().buildGUI();
+        new GameController().startGame();
     }
 }

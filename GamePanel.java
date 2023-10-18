@@ -3,12 +3,14 @@ import java.awt.event.*;
 import javax.swing.*;
 
   
-public class GamePanel extends JPanel implements ActionListener {
+public class GamePanel extends JPanel implements Runnable {
+    final int FPS = 240;
+
     Player player;
     KeyHandler keyHandler = new KeyHandler();
 
     
-    Timer renderLoop = new Timer(1000 / 60, this);
+    Thread gameThread;
 
     GamePanel(Player player) {
         this.player = player;
@@ -18,29 +20,42 @@ public class GamePanel extends JPanel implements ActionListener {
         this.setFocusable(true);
     }
 
-    void startRenderLoop() {
-        renderLoop.start();
-    }
-
-    public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == renderLoop) {
-            //Update
-            update();
-            //Render
-            repaint();
-        }
-    }
-
-    public void update(){
-        // Change player position
-        double[] normalizedDirectionVector = keyHandler.getCurrentUnitDirectionVector();
-
-        player.setXPos(normalizedDirectionVector[0]);
-        player.setYPos(normalizedDirectionVector[1]);
+    void startGameThread() {
+        gameThread = new Thread(this);
+        gameThread.start();
     }
 
     @Override
-    public void paintComponent(final Graphics g) {
+    public void run() {
+
+        double drawInterval = 1000000000 / FPS;
+        double delta = 0;
+        long lastTime = System.nanoTime();
+        long currentTime;
+
+        while (gameThread != null) {
+
+            currentTime = System.nanoTime();
+
+            delta += (currentTime - lastTime) / drawInterval;
+
+            lastTime = currentTime;
+
+            if (delta >= 1) {
+                update(drawInterval);
+                repaint();
+                delta--;
+            }
+        }
+    }
+
+    public void update(double drawInterval) {
+        // Change player position
+        player.update(keyHandler.getNormalizedDirectionVector(), drawInterval);
+    }
+
+
+    public void paintComponent(Graphics g) {
         super.paintComponent(g);
         //Paint player
         g.fillOval((int) player.getXPos(), (int) player.getYPos(), (int) player.getRadius(), (int) player.getRadius());
