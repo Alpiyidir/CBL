@@ -1,34 +1,44 @@
 import java.awt.event.*;
 
+import javax.swing.plaf.synth.SynthSplitPaneUI;
+
 public class MouseHandler implements MouseListener{
 
-    public void mousePressed(MouseEvent e) {
-      
-       saySomething("Mouse pressed; # of clicks: "
-                    + e.getClickCount(), e);
-    }
+   boolean mousePressed;
+   public void mousePressed(MouseEvent e) {
 
-    public void mouseReleased(MouseEvent e) {
-       saySomething("Mouse released; # of clicks: "
-                    + e.getClickCount(), e);
-    }
+      System.out.println("Mouse clicked");
+      mousePressed = true;
+      saySomething("Mouse pressed; # of clicks: "
+                  + e.getClickCount(), e);
+   }
 
-    public void mouseEntered(MouseEvent e) {
-       saySomething("Mouse entered", e);
-    }
+   public void mouseReleased(MouseEvent e) {
+      mousePressed = false;
+      saySomething("Mouse released; # of clicks: "
+                  + e.getClickCount(), e);
+   }
 
-    public void mouseExited(MouseEvent e) {
-       saySomething("Mouse exited", e);
-    }
+   public void mouseEntered(MouseEvent e) {
+      saySomething("Mouse entered", e);
+   }
 
-    public void mouseClicked(MouseEvent e) {
-       saySomething("Mouse clicked (# of clicks: "
-                    + e.getClickCount() + ")", e);
-    }
+   public void mouseExited(MouseEvent e) {
+      saySomething("Mouse exited", e);
+   }
 
-    void saySomething(String eventDescription, MouseEvent e) {
-        //textArea.append(eventDescription + " detected on "
-                       // + e.getComponent().getClass().getName()
-                        //+ "." + newline);
-    }
+   public void mouseClicked(MouseEvent e) {
+      saySomething("Mouse clicked (# of clicks: "
+                  + e.getClickCount() + ")", e);
+   }
+
+   void saySomething(String eventDescription, MouseEvent e) {
+      //textArea.append(eventDescription + " detected on "
+                     // + e.getComponent().getClass().getName()
+                     //+ "." + newline);
+   }
+
+   public boolean getMousePressed(){
+      return mousePressed;
+   }
 }

@@ -1,5 +1,7 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
+
 import javax.swing.*;
 
   
@@ -7,7 +9,10 @@ public class GamePanel extends JPanel implements Runnable {
     final int FPS = 240;
 
     Player player;
+    ArrayList<Bullet> bullets = new ArrayList<Bullet>();
+
     KeyHandler keyHandler = new KeyHandler();
+    MouseHandler mouseHandler = new MouseHandler();
 
     
     Thread gameThread;
@@ -15,6 +20,7 @@ public class GamePanel extends JPanel implements Runnable {
     GamePanel(Player player) {
         this.player = player;
         this.addKeyListener(keyHandler);
+        this.addMouseListener(mouseHandler);
         Color lightBlue = new Color(50, 133, 168);
         this.setBackground(lightBlue);
         this.setFocusable(true);
@@ -52,6 +58,21 @@ public class GamePanel extends JPanel implements Runnable {
     public void update(double drawInterval) {
         // Change player position
         player.update(keyHandler.getNormalizedDirectionVector(), drawInterval);
+
+        //Shoot bullet
+        System.out.println(mouseHandler.getMousePressed());;
+        if (mouseHandler.getMousePressed()){
+            System.out.println("Mouse pressed: ");
+            bullets.add(new Bullet(player.getXPos(), player.getYPos(), new int[] {0, 0}));
+        }
+        //Bullet movement
+        if (bullets != null){
+            for (int i = 0; i < bullets.size(); i++){
+                
+            }
+        }
+
+        
     }
 
 
@@ -59,6 +80,14 @@ public class GamePanel extends JPanel implements Runnable {
         super.paintComponent(g);
         //Paint player
         g.fillOval((int) player.getXPos(), (int) player.getYPos(), (int) player.getRadius(), (int) player.getRadius());
+
+        // Paint all bullets
+        if (bullets != null){
+            for (int i = 0; i < bullets.size(); i++){
+                g.fillOval((int) bullets.get(i).getXPos(), (int) bullets.get(i).getYPos(), 5, 5);
+            }
+        }
+        
     }
 
 }
