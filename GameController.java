@@ -10,7 +10,7 @@ class GameController {
     KeyHandler keyHandler;
 
     GameController() {
-        this.player = new Player(25);
+        this.player = new Player(12);
         this.keyHandler = new KeyHandler();
     }
 
