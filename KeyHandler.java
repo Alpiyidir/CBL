@@ -55,7 +55,7 @@ public class KeyHandler implements KeyListener {
         return new boolean[]{upPressed, downPressed, leftPressed, rightPressed};
     }
 
-    public double[] getNormalizedDirectionVector() {
+    public double[] getNormalizedDirectionVectorFromKeys() {
         double[] directionVector = new double[2];
         if (!(upPressed && downPressed)) {
             if (upPressed) {

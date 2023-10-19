@@ -35,7 +35,6 @@ public class GamePanel extends JPanel implements Runnable {
 
     @Override
     public void run() {
-
         double drawInterval = 1000000000 / FPS;
         double delta = 0;
         long lastTime = System.nanoTime();
@@ -58,9 +57,12 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void update(double drawInterval) {
-        /*for (int i = 0; i < bullets.size(); i++) {
-            System.out.println("i: " + i + " x: " + bullets.get(i).getXPos() + " y: " + bullets.get(i).getYPos());
-        }*/
+        /*
+         * Multiplicative movement speed modifier tied to drawInterval which is tied to frame rate,
+         * should be used while updating the position of any object in the game multiplicatively
+         * to ensure that movement speed is consistent across all framerates.
+         */
+        final double drawIntervalMovementModifier = drawInterval / Math.pow(10, 7);
 
         if (mouseHandler.getMousePressed()) {
             if (System.nanoTime() - 1e8 > lastBulletTime) {
@@ -73,15 +75,16 @@ public class GamePanel extends JPanel implements Runnable {
                 lastBulletTime = System.nanoTime();
             }
         }
+        
         // Change player position
-        player.update(keyHandler.getNormalizedDirectionVector(), drawInterval / Math.pow(10, 7));
+        player.update(keyHandler.getNormalizedDirectionVectorFromKeys(), drawIntervalMovementModifier);
 
         //Shoot bullet
         //System.out.println(mouseHandler.getMousePressed());
         
         //Bullet movement
         for (int i = 0; i < bullets.size(); i++){
-            bullets.get(i).updatePos(drawInterval / Math.pow(10, 7));
+            bullets.get(i).updatePos(drawIntervalMovementModifier);
         }
 
     }

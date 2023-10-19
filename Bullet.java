@@ -1,5 +1,3 @@
-import java.util.ArrayList;
-
 public class Bullet extends CircularObject {
 
     double xPos; 
@@ -8,9 +6,6 @@ public class Bullet extends CircularObject {
     double speed;
 
     double[] normalizedDirectionVector;
-
-    
-
 
     public Bullet(double xPos, double yPos, double radius, double speed, double[] directionVector){
         this.xPos = xPos;
