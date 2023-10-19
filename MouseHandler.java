@@ -3,6 +3,7 @@ import java.awt.event.*;
 public class MouseHandler implements MouseListener{
 
     public void mousePressed(MouseEvent e) {
+      
        saySomething("Mouse pressed; # of clicks: "
                     + e.getClickCount(), e);
     }
@@ -26,8 +27,8 @@ public class MouseHandler implements MouseListener{
     }
 
     void saySomething(String eventDescription, MouseEvent e) {
-        textArea.append(eventDescription + " detected on "
-                        + e.getComponent().getClass().getName()
-                        + "." + newline);
+        //textArea.append(eventDescription + " detected on "
+                       // + e.getComponent().getClass().getName()
+                        //+ "." + newline);
     }
 }
