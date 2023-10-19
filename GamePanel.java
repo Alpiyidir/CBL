@@ -63,18 +63,6 @@ public class GamePanel extends JPanel implements Runnable {
          * to ensure that movement speed is consistent across all framerates.
          */
         final double drawIntervalMovementModifier = drawInterval / Math.pow(10, 7);
-
-        if (mouseHandler.getMousePressed()) {
-            if (System.nanoTime() - 1e8 > lastBulletTime) {
-                System.out.println("Bullet shot");
-                bullets.add(new Bullet(player.getXPos(), player.getYPos(), 5, 5, new double[] {mouseHandler.getX()-player.getXPos(), mouseHandler.getY()-player.getYPos()}));
-
-                /*System.out.println(mouseHandler.getX());
-                System.out.println(mouseHandler.getX()-player.getXPos());
-                System.out.println(mouseHandler.getX()-player.getXPos());*/
-                lastBulletTime = System.nanoTime();
-            }
-        }
         
         // Change player position
         player.update(keyHandler.getNormalizedDirectionVectorFromKeys(), drawIntervalMovementModifier);
@@ -87,6 +75,25 @@ public class GamePanel extends JPanel implements Runnable {
             bullets.get(i).updatePos(drawIntervalMovementModifier);
         }
 
+        /* 
+         * All objcets should be created after an update is finished so that they are not updated 
+         * in the current loop
+         */
+        createNewObjects();
+    }
+
+    public void createNewObjects() {
+        if (mouseHandler.getMousePressed()) {
+            if (System.nanoTime() - 1e8 > lastBulletTime) {
+                System.out.println("Bullet shot");
+                bullets.add(new Bullet(player.getXPos(), player.getYPos(), 5, 5, new double[] {mouseHandler.getX()-player.getXPos(), mouseHandler.getY()-player.getYPos()}));
+
+                /*System.out.println(mouseHandler.getX());
+                System.out.println(mouseHandler.getX()-player.getXPos());
+                System.out.println(mouseHandler.getX()-player.getXPos());*/
+                lastBulletTime = System.nanoTime();
+            }
+        }
     }
 
 
@@ -102,7 +109,6 @@ public class GamePanel extends JPanel implements Runnable {
             Bullet bullet = bullets.get(i);
             g.fillOval((int) (bullet.getXPos() - bullet.radius), (int) (bullet.getYPos() - bullet.radius), (int) bullet.radius * 2, (int) bullet.radius * 2);
         }
-    
     }
 
 }
