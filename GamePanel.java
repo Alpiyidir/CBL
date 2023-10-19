@@ -10,6 +10,8 @@ public class GamePanel extends JPanel implements Runnable {
 
     Player player;
 
+    ArrayList<Enemy> enemies = new ArrayList<Enemy>();
+
     ArrayList<Bullet> bullets = new ArrayList<Bullet>();
     long lastBulletTime = (long) (System.nanoTime());
 
@@ -75,8 +77,14 @@ public class GamePanel extends JPanel implements Runnable {
             bullets.get(i).updatePos(drawIntervalMovementModifier);
         }
 
+        // TODO: Enemy movement
+        // adding new enemies
+        if (Math.floor(Math.random()*100) == 14 && enemies.size() < 15){
+            enemies.add(new Enemy((Math.floor(Math.random()*1000)), (Math.floor(Math.random()*1000)), 5.0, 5.0));
+        }
+
         /* 
-         * All objcets should be created after an update is finished so that they are not updated 
+         * All objects should be created after an update is finished so that they are not updated 
          * in the current loop
          */
         createNewObjects();
@@ -107,7 +115,15 @@ public class GamePanel extends JPanel implements Runnable {
         // Paint all bullets
         for (int i = 0; i < bullets.size(); i++) {
             Bullet bullet = bullets.get(i);
-            g.fillOval((int) (bullet.getXPos() - bullet.radius), (int) (bullet.getYPos() - bullet.radius), (int) bullet.radius * 2, (int) bullet.radius * 2);
+            double bulletRadius = bullet.getRadius();
+            g.fillOval((int) (bullet.getXPos() - bulletRadius), (int) (bullet.getYPos() - bulletRadius), (int) bulletRadius * 2, (int) bulletRadius * 2);
+        }
+
+        // Paint all enemies
+        for (int i = 0; i < enemies.size(); i++) {
+            Enemy enemy = enemies.get(i);
+            double enemyRadius = enemy.getRadius();
+            g.fillOval((int) (enemy.getXPos() - enemyRadius), (int) (enemy.getYPos() - enemyRadius), (int) enemyRadius * 2, (int) enemyRadius * 2);
         }
     }
 

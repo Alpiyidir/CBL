@@ -23,6 +23,10 @@ public class Bullet extends CircularObject {
         return yPos;
     }
 
+    public double getRadius() {
+        return radius;
+    }
+
     public void updateXPos(double timeStep) {
         this.xPos += this.normalizedDirectionVector[0] * speed * timeStep;
     }

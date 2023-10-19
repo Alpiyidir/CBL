@@ -2,19 +2,20 @@ class Player extends CircularObject {
     private double radius;
     private double xPos;
     private double yPos;
-    private double xMultiplier = 1;
-    private double yMultiplier = 1;
+    private double speed;
 
-    Player(double radius, double xPos, double yPos) {
-        this.radius = radius;
+    Player(double xPos, double yPos, double radius, double speed) {
         this.xPos = xPos;
         this.yPos = yPos;
+        this.radius = radius;
+        this.speed = speed;
     }
 
     Player(double radius) {
         this.radius = radius;
         this.xPos = 1280 / 2;
         this.yPos = 720 / 2;
+        this.speed = 5;
     }
 
     public double getRadius() {
@@ -29,19 +30,15 @@ class Player extends CircularObject {
         return yPos;
     }
 
-    public double getXDelta() {
-        return xMultiplier;
-    }
-
-    public double getYDelta() {
-        return yMultiplier;
+    public double getSpeed() {
+        return speed;
     }
     
     public void addXPos(double changeX) {
-        this.xPos += changeX * xMultiplier;
+        this.xPos += changeX * speed;
     }
     public void addYPos(double changeY) {
-        this.yPos += changeY * yMultiplier;
+        this.yPos += changeY * speed;
     }
 
     public void setXPos(double XPos) {

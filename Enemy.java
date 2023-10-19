@@ -1,16 +1,15 @@
 class Enemy {
-    double xPos;
-    double yPos;
-
-    static double speed;
+    private double xPos;
+    private double yPos;
     private double radius;
-    private double xMultiplier = 1;
-    private double yMultiplier = 1;
+    private double speed;
+    
 
-    Enemy(double radius, double xPos, double yPos) {
+    Enemy(double xPos, double yPos, double radius, double speed) {
         this.radius = radius;
         this.xPos = xPos;
         this.yPos = yPos;
+        this.speed = speed;
     }
 
     public double getRadius() {
@@ -25,19 +24,15 @@ class Enemy {
         return yPos;
     }
 
-    public double getXDelta() {
-        return xMultiplier;
-    }
-
-    public double getYDelta() {
-        return yMultiplier;
+    public double speed() {
+        return speed;
     }
 
     public void addXPos(double changeX) {
-        this.xPos += changeX * xMultiplier;
+        this.xPos += changeX * speed;
     }
     public void addYPos(double changeY) {
-        this.yPos += changeY * yMultiplier;
+        this.yPos += changeY * speed;
     }
 
     public void setXPos(double XPos) {
@@ -52,10 +47,10 @@ class Enemy {
         this.yPos = y;
     }
 
-    public void update(double[] normalizedDirectionVector, double drawInterval) {
+    public void update(double[] normalizedDirectionVector, double drawIntervalMovementModifier) {
         //System.out.println("0: " + normalizedDirectionVector[0] + " 1: " + normalizedDirectionVector[1]);
-        this.addXPos(normalizedDirectionVector[0] * drawInterval / Math.pow(10, 7));
-        this.addYPos(normalizedDirectionVector[1] * drawInterval / Math.pow(10, 7));
+        this.addXPos(normalizedDirectionVector[0] * drawIntervalMovementModifier);
+        this.addYPos(normalizedDirectionVector[1] * drawIntervalMovementModifier);
     }
         
 
