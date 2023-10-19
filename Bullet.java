@@ -1,24 +1,23 @@
 import java.util.ArrayList;
 
-public class Bullet {
+public class Bullet extends CircularObject {
 
     double xPos; 
     double yPos;
+    double radius;
+    double speed;
 
-    double[] direction;
+    double[] normalizedDirectionVector;
 
-    static double speed = 5;
+    
 
 
-    public Bullet(double x, double y, double[] direction){
-        xPos = (int) x;
-        yPos = (int) y;
-        this.direction = direction;
-        double vectorLength = Math.pow(Math.pow(this.direction[0],2) + Math.pow(this.direction[1], 2), 1.0/2.0);
-        System.out.println("vectorLength: " + vectorLength);
-        this.direction[0] = direction[0] / vectorLength;
-        this.direction[1] = direction[1] / vectorLength;
-        System.out.println("X: " + this.direction[0] + " Y: " + this.direction[1]);
+    public Bullet(double xPos, double yPos, double radius, double speed, double[] directionVector){
+        this.xPos = xPos;
+        this.yPos = yPos;
+        this.radius = radius;
+        this.speed = speed;
+        this.normalizedDirectionVector = MathHelpers.normalizeVector(directionVector);
     }
 
     public double getXPos() {
@@ -29,11 +28,16 @@ public class Bullet {
         return yPos;
     }
 
-    public void addXPos() {
-        this.xPos += this.direction[0] * speed;
+    public void updateXPos(double timeStep) {
+        this.xPos += this.normalizedDirectionVector[0] * speed * timeStep;
     }
-    public void addYPos() {
-        this.yPos += this.direction[1] * speed;
+    public void updateYPos(double timeStep) {
+        this.yPos += this.normalizedDirectionVector[1] * speed * timeStep;
+    }
+
+    public void updatePos(double timeStep) {
+        updateXPos(timeStep);
+        updateYPos(timeStep);
     }
 
     public void setXPos(double XPos) {

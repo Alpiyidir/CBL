@@ -73,18 +73,7 @@ public class KeyHandler implements KeyListener {
             }
         }
 
-        double sum = 0;
-        for (int i = 0; i < directionVector.length; i++) {
-            sum += Math.pow(directionVector[i], 2);
-        }
-        double magnitude = Math.sqrt(sum);
-        for (int i = 0; i < directionVector.length; i++) {
-            if (directionVector[i] != 0.0) {
-                directionVector[i] /= magnitude;
-            }
-        }
-
-        return directionVector;
+        return MathHelpers.normalizeVector(directionVector);
     }
 
     /*protected class KeysPressed {

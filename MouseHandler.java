@@ -17,7 +17,6 @@ public class MouseHandler implements MouseListener, MouseMotionListener{
       return yPos;
    }
 
-
    public void mousePressed(MouseEvent e) {
 
       System.out.println("Mouse clicked");

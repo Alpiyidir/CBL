@@ -9,18 +9,17 @@ public class GamePanel extends JPanel implements Runnable {
     final int FPS = 240;
 
     Player player;
+
     ArrayList<Bullet> bullets = new ArrayList<Bullet>();
+    long lastBulletTime = (long) (System.nanoTime());
 
     KeyHandler keyHandler = new KeyHandler();
     MouseHandler mouseHandler = new MouseHandler();
 
-    
     Thread gameThread;
 
-    long lastBulletTime = (long) (System.nanoTime() - 1e8);
-
-    GamePanel(Player player) {
-        this.player = player;
+    GamePanel() {
+        this.player = new Player(12);
         this.addKeyListener(keyHandler);
         this.addMouseListener(mouseHandler);
         this.addMouseMotionListener(mouseHandler);
@@ -59,43 +58,48 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void update(double drawInterval) {
+        /*for (int i = 0; i < bullets.size(); i++) {
+            System.out.println("i: " + i + " x: " + bullets.get(i).getXPos() + " y: " + bullets.get(i).getYPos());
+        }*/
+
+        if (mouseHandler.getMousePressed()) {
+            if (System.nanoTime() - 1e8 > lastBulletTime) {
+                System.out.println("Bullet shot");
+                bullets.add(new Bullet(player.getXPos(), player.getYPos(), 5, 5, new double[] {mouseHandler.getX()-player.getXPos(), mouseHandler.getY()-player.getYPos()}));
+
+                /*System.out.println(mouseHandler.getX());
+                System.out.println(mouseHandler.getX()-player.getXPos());
+                System.out.println(mouseHandler.getX()-player.getXPos());*/
+                lastBulletTime = System.nanoTime();
+            }
+        }
         // Change player position
-        player.update(keyHandler.getNormalizedDirectionVector(), drawInterval);
+        player.update(keyHandler.getNormalizedDirectionVector(), drawInterval / Math.pow(10, 7));
 
         //Shoot bullet
         //System.out.println(mouseHandler.getMousePressed());
-        if (mouseHandler.getMousePressed() && System.nanoTime() - 1e8 > lastBulletTime) {
-            System.out.println("Mouse pressed: ");
-            bullets.add(new Bullet(player.getXPos(), player.getYPos(), new double[] {mouseHandler.getX()-player.getXPos(), mouseHandler.getY()-player.getYPos()}));
-            System.out.println(mouseHandler.getX());
-            
-            System.out.println(mouseHandler.getX()-player.getXPos());
-            System.out.println(mouseHandler.getX()-player.getXPos());
-            lastBulletTime = System.nanoTime();
-        }
+        
         //Bullet movement
-        if (bullets != null) {
-            for (int i = 0; i < bullets.size(); i++){
-                bullets.get(i).addXPos();
-                bullets.get(i).addYPos();
-            }
+        for (int i = 0; i < bullets.size(); i++){
+            bullets.get(i).updatePos(drawInterval / Math.pow(10, 7));
         }
+
     }
 
 
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        //Paint player
+
+        // Paint player
         double playerRadius = player.getRadius();
-        g.fillOval((int) (player.getXPos() - playerRadius), (int) (player.getYPos() - playerRadius), (int) player.getRadius() * 2, (int) player.getRadius() * 2);
+        g.fillOval((int) (player.getXPos() - playerRadius), (int) (player.getYPos() - playerRadius), (int) playerRadius * 2, (int) playerRadius * 2);
+
         // Paint all bullets
-        if (bullets != null)   {
-            for (int i = 0; i < bullets.size(); i++) {
-                double radius = 4;
-                g.fillOval((int) (bullets.get(i).getXPos() - radius), (int) (bullets.get(i).getYPos() - radius), (int) radius * 2, (int) radius * 2);
-            }
+        for (int i = 0; i < bullets.size(); i++) {
+            Bullet bullet = bullets.get(i);
+            g.fillOval((int) (bullet.getXPos() - bullet.radius), (int) (bullet.getYPos() - bullet.radius), (int) bullet.radius * 2, (int) bullet.radius * 2);
         }
-        
+    
     }
 
 }

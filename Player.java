@@ -58,8 +58,8 @@ class Player extends CircularObject {
 
     public void update(double[] normalizedDirectionVector, double drawInterval) {
         //System.out.println("0: " + normalizedDirectionVector[0] + " 1: " + normalizedDirectionVector[1]);
-        this.addXPos(normalizedDirectionVector[0] * drawInterval / Math.pow(10, 7));
-        this.addYPos(normalizedDirectionVector[1] * drawInterval / Math.pow(10, 7));
+        this.addXPos(normalizedDirectionVector[0] * drawInterval);
+        this.addYPos(normalizedDirectionVector[1] * drawInterval);
     }
     
 }

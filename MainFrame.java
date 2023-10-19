@@ -5,30 +5,22 @@ import javax.swing.*;
 
 
 
-class GameController {
-    Player player;
-    KeyHandler keyHandler;
-
-    GameController() {
-        this.player = new Player(12);
-        this.keyHandler = new KeyHandler();
-    }
+class MainFrame {
 
     void startGame() {
         JFrame frame = new JFrame ("Game Window");
+        GamePanel gamePanel = new GamePanel();
 
         frame.addKeyListener(new KeyHandler());
-
-        GamePanel gamePanel = new GamePanel(player);
-
-        frame.setSize(1280, 720);
         frame.add(gamePanel);
+        frame.setSize(1280, 720);
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
         gamePanel.startGameThread();
     }
 
     public static void main(String[] args) {
-        new GameController().startGame();
+        new MainFrame().startGame();
     }
 }
