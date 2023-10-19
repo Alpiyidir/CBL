@@ -2,9 +2,22 @@ import java.awt.event.*;
 
 import javax.swing.plaf.synth.SynthSplitPaneUI;
 
-public class MouseHandler implements MouseListener{
+public class MouseHandler implements MouseListener, MouseMotionListener{
+
+   int xPos;
+   int yPos;
 
    boolean mousePressed;
+
+   public int getX() {
+      return xPos;
+   }
+
+   public int getY() {
+      return yPos;
+   }
+
+
    public void mousePressed(MouseEvent e) {
 
       System.out.println("Mouse clicked");
@@ -32,6 +45,12 @@ public class MouseHandler implements MouseListener{
                   + e.getClickCount() + ")", e);
    }
 
+   @Override
+   public void mouseMoved(MouseEvent e){
+      this.xPos = e.getX();
+      this.yPos = e.getY();
+   }
+
    void saySomething(String eventDescription, MouseEvent e) {
       //textArea.append(eventDescription + " detected on "
                      // + e.getComponent().getClass().getName()
@@ -40,5 +59,13 @@ public class MouseHandler implements MouseListener{
 
    public boolean getMousePressed(){
       return mousePressed;
+   }
+
+   @Override
+   public void mouseDragged(MouseEvent e) {
+      this.xPos = e.getX();
+      this.yPos = e.getY();
+      // TODO Auto-generated method stub
+      //throw new UnsupportedOperationException("Unimplemented method 'mouseDragged'");
    }
 }

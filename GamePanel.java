@@ -17,10 +17,13 @@ public class GamePanel extends JPanel implements Runnable {
     
     Thread gameThread;
 
+    long lastBulletTime = (long) (System.nanoTime() - 1e8);
+
     GamePanel(Player player) {
         this.player = player;
         this.addKeyListener(keyHandler);
         this.addMouseListener(mouseHandler);
+        this.addMouseMotionListener(mouseHandler);
         Color lightBlue = new Color(50, 133, 168);
         this.setBackground(lightBlue);
         this.setFocusable(true);
@@ -60,19 +63,24 @@ public class GamePanel extends JPanel implements Runnable {
         player.update(keyHandler.getNormalizedDirectionVector(), drawInterval);
 
         //Shoot bullet
-        System.out.println(mouseHandler.getMousePressed());;
-        if (mouseHandler.getMousePressed()){
+        //System.out.println(mouseHandler.getMousePressed());
+        if (mouseHandler.getMousePressed() && System.nanoTime() - 1e8 > lastBulletTime) {
             System.out.println("Mouse pressed: ");
-            bullets.add(new Bullet(player.getXPos(), player.getYPos(), new int[] {0, 0}));
+            bullets.add(new Bullet(player.getXPos(), player.getYPos(), new double[] {mouseHandler.getX()-player.getXPos(), mouseHandler.getY()-player.getYPos()}));
+            System.out.println(mouseHandler.getX());
+            
+            System.out.println(mouseHandler.getX()-player.getXPos());
+            System.out.println(mouseHandler.getX()-player.getXPos());
+            lastBulletTime = System.nanoTime();
         }
         //Bullet movement
         if (bullets != null){
             for (int i = 0; i < bullets.size(); i++){
-                
+                bullets.get(i).addXPos(1);
+                bullets.get(i).addYPos(1);
+
             }
         }
-
-        
     }
 
 
