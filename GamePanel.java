@@ -10,6 +10,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     Player player;
     ArrayList<Bullet> bullets = new ArrayList<Bullet>();
+    ArrayList<Enemy> enemies = new ArrayList<Enemy>();
 
     KeyHandler keyHandler = new KeyHandler();
     MouseHandler mouseHandler = new MouseHandler();
@@ -63,7 +64,6 @@ public class GamePanel extends JPanel implements Runnable {
         player.update(keyHandler.getNormalizedDirectionVector(), drawInterval);
 
         //Shoot bullet
-        //System.out.println(mouseHandler.getMousePressed());
         if (mouseHandler.getMousePressed() && System.nanoTime() - 1e8 > lastBulletTime) {
             System.out.println("Mouse pressed: ");
             bullets.add(new Bullet(player.getXPos(), player.getYPos(), new double[] {mouseHandler.getX()-player.getXPos(), mouseHandler.getY()-player.getYPos()}));
@@ -76,11 +76,18 @@ public class GamePanel extends JPanel implements Runnable {
         //Bullet movement
         if (bullets != null){
             for (int i = 0; i < bullets.size(); i++){
-                bullets.get(i).addXPos(1);
-                bullets.get(i).addYPos(1);
-
+                bullets.get(i).addXPos();
+                bullets.get(i).addYPos();
             }
         }
+
+        //TODO: Enemy movement
+        // adding new enemies
+        if (Math.floor(Math.random()*100) == 14 && enemies.size()<15){
+            enemies.add(new Enemy(50, (Math.floor(Math.random()*1000)), (Math.floor(Math.random()*1000))));
+        }
+
+
     }
 
 
@@ -95,7 +102,13 @@ public class GamePanel extends JPanel implements Runnable {
                 g.fillOval((int) bullets.get(i).getXPos(), (int) bullets.get(i).getYPos(), 5, 5);
             }
         }
-        
+
+        // Paint all enemies
+        if (enemies != null){
+            for (int i = 0; i < enemies.size(); i++){
+                g.fillOval((int) enemies.get(i).getXPos(), (int) enemies.get(i).getYPos(),(int) enemies.get(i).getRadius(), (int)enemies.get(i).getRadius());
+            }
+        }
     }
 
 }

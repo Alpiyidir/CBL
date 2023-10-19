@@ -29,10 +29,10 @@ public class Bullet {
         return yPos;
     }
 
-    public void addXPos(double changeX) {
+    public void addXPos() {
         this.xPos += this.direction[0] * speed;
     }
-    public void addYPos(double changeY) {
+    public void addYPos() {
         this.yPos += this.direction[1] * speed;
     }
 
