@@ -93,7 +93,7 @@ public class GamePanel extends JPanel implements Runnable {
 
         
         // adding new enemies
-        if (Math.floor(Math.random()*1000) == 14 && enemies.size() < 15){
+        if (Math.floor(Math.random()*100) == 14 && enemies.size() < 15){
 
             System.out.println("enemy spawned");
             // add enemies randomly to one of the sides of the screen
@@ -118,11 +118,21 @@ public class GamePanel extends JPanel implements Runnable {
                     break;
             }
         }
-        // TODO: Enemy movement
+        // Enemy movement
         for (int i=0; i< enemies.size(); i++){
             Enemy curEnemy = enemies.get(i);
             double[] direction = new double[] {horizontalSize/2.0-curEnemy.getPosX(), verticalSize/2.0-curEnemy.getPosY()};
             curEnemy.update(MathHelpers.normalizeVector(direction), drawIntervalMovementModifier);
+        }
+
+        // Collision detection
+        
+        for (int i = 0; i < enemies.size(); i++){
+            for (int j = 0; j < bullets.size(); j++){
+                if (enemies.get(i).collisionShape.intersects(bullets.get(j).collisionShape)){
+                    System.out.println("Collision");
+                }
+            }
         }
 
     }

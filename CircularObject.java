@@ -1,12 +1,22 @@
+import java.awt.Rectangle;
+import java.awt.geom.Rectangle2D;
+
 abstract class CircularObject {
     private double posX;
     private double posY;
     private double speed;
     private double radius;
+    Rectangle2D.Double collisionShape = new Rectangle2D.Double();
+
 
     CircularObject(double posX, double posY, double speed, double radius) {
         this.posX = posX;
         this.posY = posY;
+        this.collisionShape.width = radius;
+        this.collisionShape.height = radius;
+        this.collisionShape.x = posX;
+        this.collisionShape.y = posY;
+
         this.speed = speed;
         this.radius = radius;
     }
@@ -31,10 +41,14 @@ abstract class CircularObject {
 
     public void setPosX(double xPos) {
         this.posX = xPos;
+        this.collisionShape.x = xPos;
+
     }
 
     public void setPosY(double yPos) {
         this.posY = yPos;
+        this.collisionShape.y = yPos;
+
     }
 
     public void setRadius(double radius) {

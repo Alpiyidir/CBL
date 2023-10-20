@@ -1,4 +1,8 @@
+import java.awt.Rectangle;
+
 abstract class CircularObjectWithUpdate extends CircularObject {
+
+
     private double[] normalizedDirectionVector;
 
     CircularObjectWithUpdate(double xPos, double yPos, double speed, double radius) {
