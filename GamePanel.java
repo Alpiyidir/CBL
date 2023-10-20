@@ -23,7 +23,7 @@ public class GamePanel extends JPanel implements Runnable {
     Thread gameThread;
 
     GamePanel() {
-        this.player = new Player(horizontalSize / 2, verticalSize / 2, 5, 12);
+        this.player = new Player(horizontalSize / 2, verticalSize / 2, 2, 12);
         this.addKeyListener(keyHandler);
         this.addMouseListener(mouseHandler);
         this.addMouseMotionListener(mouseHandler);
@@ -102,7 +102,7 @@ public class GamePanel extends JPanel implements Runnable {
                 System.out.println("Bullet shot");
 
                 // Initialize bullet
-                Bullet bullet = new Bullet(player.getPosX(), player.getPosY(), 2, 5, 
+                Bullet bullet = new Bullet(player.getPosX(), player.getPosY(), 7, 5, 
                     MathHelpers.normalizeVector(new double[] {mouseHandler.getX() 
                         - player.getPosX(), mouseHandler.getY() - player.getPosY()}));
                 
