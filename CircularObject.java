@@ -1,4 +1,3 @@
-import java.awt.Rectangle;
 import java.awt.geom.Rectangle2D;
 
 abstract class CircularObject {
@@ -6,17 +5,10 @@ abstract class CircularObject {
     private double posY;
     private double speed;
     private double radius;
-    Rectangle2D.Double collisionShape = new Rectangle2D.Double();
-
 
     CircularObject(double posX, double posY, double speed, double radius) {
         this.posX = posX;
         this.posY = posY;
-        this.collisionShape.width = radius;
-        this.collisionShape.height = radius;
-        this.collisionShape.x = posX;
-        this.collisionShape.y = posY;
-
         this.speed = speed;
         this.radius = radius;
     }
@@ -41,14 +33,11 @@ abstract class CircularObject {
 
     public void setPosX(double xPos) {
         this.posX = xPos;
-        this.collisionShape.x = xPos;
 
     }
 
     public void setPosY(double yPos) {
         this.posY = yPos;
-        this.collisionShape.y = yPos;
-
     }
 
     public void setRadius(double radius) {
@@ -81,5 +70,11 @@ abstract class CircularObject {
     public void addPos(double[] changeVector) {
         this.addPosX(changeVector[0]);
         this.addPosY(changeVector[1]);
+    }
+
+    public boolean intersects(CircularObject circularObject) {
+        double radiiSum = circularObject.radius + this.radius;
+        double distanceBetweenCircles = Math.sqrt(Math.pow(circularObject.posX - this.posX, 2) + Math.pow(circularObject.posY - this.posY , 2));
+        return distanceBetweenCircles <= radiiSum;
     }
 }

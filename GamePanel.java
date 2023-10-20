@@ -127,9 +127,9 @@ public class GamePanel extends JPanel implements Runnable {
 
         // Collision detection
         
-        for (int i = 0; i < enemies.size(); i++){
-            for (int j = 0; j < bullets.size(); j++){
-                if (enemies.get(i).collisionShape.intersects(bullets.get(j).collisionShape)){
+        for (int i = 0; i < enemies.size(); i++) {
+            for (int j = 0; j < bullets.size(); j++) {
+                if (enemies.get(i).intersects(bullets.get(j))) {
                     System.out.println("Collision");
                 }
             }
