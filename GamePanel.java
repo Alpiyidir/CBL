@@ -6,14 +6,14 @@ import javax.swing.*;
 
   
 public class GamePanel extends JPanel implements Runnable {
-    final int FPS = 240;
+    final int framesPerSecond = 240;
 
     Player player;
 
     ArrayList<Enemy> enemies = new ArrayList<Enemy>();
 
     ArrayList<Bullet> bullets = new ArrayList<Bullet>();
-    long lastBulletTime = (long) (System.nanoTime());
+    long lastBulletTime = System.nanoTime();
 
     KeyHandler keyHandler = new KeyHandler();
     MouseHandler mouseHandler = new MouseHandler();
@@ -21,7 +21,7 @@ public class GamePanel extends JPanel implements Runnable {
     Thread gameThread;
 
     GamePanel() {
-        this.player = new Player(12);
+        this.player = new Player(1280 / 2, 720 / 2, 12, 5);
         this.addKeyListener(keyHandler);
         this.addMouseListener(mouseHandler);
         this.addMouseMotionListener(mouseHandler);
@@ -37,7 +37,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     @Override
     public void run() {
-        double drawInterval = 1000000000 / FPS;
+        double drawInterval = 1000000000 / framesPerSecond;
         double delta = 0;
         long lastTime = System.nanoTime();
         long currentTime;
@@ -73,14 +73,14 @@ public class GamePanel extends JPanel implements Runnable {
         //System.out.println(mouseHandler.getMousePressed());
         
         //Bullet movement
-        for (int i = 0; i < bullets.size(); i++){
+        for (int i = 0; i < bullets.size(); i++) {
             bullets.get(i).updatePos(drawIntervalMovementModifier);
         }
 
         // TODO: Enemy movement
         // adding new enemies
         if (Math.floor(Math.random()*100) == 14 && enemies.size() < 15){
-            enemies.add(new Enemy((Math.floor(Math.random()*1000)), (Math.floor(Math.random()*1000)), 5.0, 5.0));
+            enemies.add(new Enemy((Math.floor(Math.random()*1280)), (Math.floor(Math.random()*720)), 5.0, 5.0));
         }
 
         /* 
@@ -94,7 +94,7 @@ public class GamePanel extends JPanel implements Runnable {
         if (mouseHandler.getMousePressed()) {
             if (System.nanoTime() - 1e8 > lastBulletTime) {
                 System.out.println("Bullet shot");
-                bullets.add(new Bullet(player.getXPos(), player.getYPos(), 5, 5, new double[] {mouseHandler.getX()-player.getXPos(), mouseHandler.getY()-player.getYPos()}));
+                bullets.add(new Bullet(player.getPosX(), player.getPosY(), 5, 5, new double[] {mouseHandler.getX()-player.getPosX(), mouseHandler.getY()-player.getPosY()}));
 
                 /*System.out.println(mouseHandler.getX());
                 System.out.println(mouseHandler.getX()-player.getXPos());
@@ -110,20 +110,20 @@ public class GamePanel extends JPanel implements Runnable {
 
         // Paint player
         double playerRadius = player.getRadius();
-        g.fillOval((int) (player.getXPos() - playerRadius), (int) (player.getYPos() - playerRadius), (int) playerRadius * 2, (int) playerRadius * 2);
+        g.fillOval((int) (player.getPosX() - playerRadius), (int) (player.getPosY() - playerRadius), (int) playerRadius * 2, (int) playerRadius * 2);
 
         // Paint all bullets
         for (int i = 0; i < bullets.size(); i++) {
             Bullet bullet = bullets.get(i);
             double bulletRadius = bullet.getRadius();
-            g.fillOval((int) (bullet.getXPos() - bulletRadius), (int) (bullet.getYPos() - bulletRadius), (int) bulletRadius * 2, (int) bulletRadius * 2);
+            g.fillOval((int) (bullet.getPosX() - bulletRadius), (int) (bullet.getPosY() - bulletRadius), (int) bulletRadius * 2, (int) bulletRadius * 2);
         }
 
         // Paint all enemies
         for (int i = 0; i < enemies.size(); i++) {
             Enemy enemy = enemies.get(i);
             double enemyRadius = enemy.getRadius();
-            g.fillOval((int) (enemy.getXPos() - enemyRadius), (int) (enemy.getYPos() - enemyRadius), (int) enemyRadius * 2, (int) enemyRadius * 2);
+            g.fillOval((int) (enemy.getPosX() - enemyRadius), (int) (enemy.getPosY() - enemyRadius), (int) enemyRadius * 2, (int) enemyRadius * 2);
         }
     }
 
