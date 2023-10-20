@@ -5,18 +5,34 @@ public class MathHelpers {
     }
 
     public static double[] normalizeVector(double[] directionVector) {
+        double[] normalizedDirectionVector = new double[directionVector.length];
+
         double squaredSum = 0;
         for (int i = 0; i < directionVector.length; i++) {
             squaredSum += Math.pow(directionVector[i], 2);
         }
         double magnitude = Math.sqrt(squaredSum);
         if (magnitude == 0) {
-            return directionVector;
+            return normalizedDirectionVector;
         }
 
         for (int i = 0; i < directionVector.length; i++) {
-            directionVector[i] /= magnitude;
+            normalizedDirectionVector[i] = directionVector[i] / magnitude;
         }
-        return directionVector;
+        return normalizedDirectionVector;
+    }
+
+    public static double[] sumVectors(double[] vector1, double[] vector2) {
+        if (vector1.length != vector2.length) {
+            return null;
+        }
+
+        double[] vectorSum = new double[vector1.length];
+
+        for (int i = 0; i < vector1.length; i++) {
+            vectorSum[i] = vector1[i] + vector2[i];
+        }
+
+        return vectorSum;
     }
 }

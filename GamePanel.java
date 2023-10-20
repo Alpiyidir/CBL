@@ -1,6 +1,7 @@
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
+import java.util.Vector;
 
 import javax.swing.*;
 
@@ -21,7 +22,7 @@ public class GamePanel extends JPanel implements Runnable {
     Thread gameThread;
 
     GamePanel() {
-        this.player = new Player(1280 / 2, 720 / 2, 12, 5);
+        this.player = new Player(1280 / 2, 720 / 2, 5, 12);
         this.addKeyListener(keyHandler);
         this.addMouseListener(mouseHandler);
         this.addMouseMotionListener(mouseHandler);
@@ -69,12 +70,20 @@ public class GamePanel extends JPanel implements Runnable {
         // Change player position
         player.update(keyHandler.getNormalizedDirectionVectorFromKeys(), drawIntervalMovementModifier);
 
+        System.out.println("Player x: " + player.getDirectionVector()[0] + " y: " + player.getDirectionVector()[1]);
         //Shoot bullet
         //System.out.println(mouseHandler.getMousePressed());
         
         //Bullet movement
         for (int i = 0; i < bullets.size(); i++) {
-            bullets.get(i).updatePos(drawIntervalMovementModifier);
+            Bullet bullet = bullets.get(i);
+
+            // Remove bullets at screen border (hardcoded for now)
+            if (bullet.getPosX() >= 1280 || bullet.getPosX() < 0 || bullet.getPosY() >= 720 || bullet.getPosY() < 0) {
+                bullets.remove(i);
+            }
+
+            bullet.updatePos(drawIntervalMovementModifier);
         }
 
         // TODO: Enemy movement
@@ -94,7 +103,27 @@ public class GamePanel extends JPanel implements Runnable {
         if (mouseHandler.getMousePressed()) {
             if (System.nanoTime() - 1e8 > lastBulletTime) {
                 System.out.println("Bullet shot");
-                bullets.add(new Bullet(player.getPosX(), player.getPosY(), 5, 2, new double[] {mouseHandler.getX()-player.getPosX(), mouseHandler.getY()-player.getPosY()}));
+
+                // Initialize bullet
+                Bullet bullet = new Bullet(player.getPosX(), player.getPosY(), 2, 5, 
+                    new double[] {mouseHandler.getX()-player.getPosX(), mouseHandler.getY()-player.getPosY()});
+                
+
+                double[] bulletDirectionVector = bullet.getDirectionVector();
+                double[] playerDirectionVector = player.getDirectionVector();
+                
+                // Adjust direction of bullet accounting for velocity of player
+                double[] combinedDirectionVector = MathHelpers.sumVectors(playerDirectionVector, 
+                    bulletDirectionVector);
+                double[] normalizedCombinedDirectionVector 
+                    = MathHelpers.normalizeVector(combinedDirectionVector);
+                bullet.setNormalizedDirectionVector(normalizedCombinedDirectionVector);
+                
+                // Set new speed accounting for velocity of player
+                bullet.setSpeed(Math.sqrt(Math.pow(combinedDirectionVector[0], 2) + Math.pow(combinedDirectionVector[1], 2)));
+
+                // Add current bullet to bullets arraylist
+                bullets.add(bullet);
 
                 /*System.out.println(mouseHandler.getX());
                 System.out.println(mouseHandler.getX()-player.getXPos());
