@@ -1,8 +1,8 @@
 public class Bullet extends CircularObject {
     double[] normalizedDirectionVector;
 
-    public Bullet(double xPos, double yPos, double radius, double speed, double[] directionVector) {
-        super(xPos, yPos, radius, speed);
+    public Bullet(double xPos, double yPos, double speed, double radius, double[] directionVector) {
+        super(xPos, yPos, speed, radius);
         this.normalizedDirectionVector = MathHelpers.normalizeVector(directionVector);
     }
 
@@ -15,6 +15,11 @@ public class Bullet extends CircularObject {
             return;
         }
         this.normalizedDirectionVector = normalizedDirectionVector;
+    }
+
+    public double[] getDirectionVector() {
+        double[] normalizedDirectionVector = this.getNormalizedDirectionVector();
+        return new double[]{normalizedDirectionVector[0] * this.getSpeed(), normalizedDirectionVector[1] * this.getSpeed()};
     }
 
     public void updatePosX(double timeStep) {

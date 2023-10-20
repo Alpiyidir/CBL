@@ -1,14 +1,14 @@
 abstract class CircularObject {
     private double posX;
     private double posY;
-    private double radius;
     private double speed;
+    private double radius;
 
-    CircularObject(double posX, double posY, double radius, double speed) {
+    CircularObject(double posX, double posY, double speed, double radius) {
         this.posX = posX;
         this.posY = posY;
-        this.radius = radius;
         this.speed = speed;
+        this.radius = radius;
     }
 
     // Default getters/setters
@@ -52,10 +52,20 @@ abstract class CircularObject {
     }
 
     public void addPosX(double changeX) {
-        this.setPosX(this.getPosX() + changeX * this.getSpeed());
+        this.setPosX(this.getPosX() + changeX);
     }
     
     public void addPosY(double changeY) {
-        this.setPosY(this.getPosY() + changeY * this.getSpeed());
+        this.setPosY(this.getPosY() + changeY);
+    }
+
+    public void addPos(double changeX, double changeY) {
+        this.addPosX(changeX);
+        this.addPosY(changeY);
+    }
+
+    public void addPos(double[] changeVector) {
+        this.addPosX(changeVector[0]);
+        this.addPosY(changeVector[1]);
     }
 }

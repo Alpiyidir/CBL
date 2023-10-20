@@ -1,6 +1,6 @@
 class Enemy extends CircularObject {
-    Enemy(double xPos, double yPos, double radius, double speed) {
-        super(xPos, yPos, radius, speed);
+    Enemy(double xPos, double yPos, double speed, double radius) {
+        super(xPos, yPos, speed, radius);
     }
 
     public void update(double[] normalizedDirectionVector, double drawIntervalMovementModifier) {
