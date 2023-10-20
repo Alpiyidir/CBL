@@ -52,7 +52,9 @@ public class GamePanel extends JPanel implements Runnable {
             lastTime = currentTime;
 
             if (delta >= 1) {
+                processInputsThatDontCreateObjects();
                 update(drawInterval);
+                processInputsThatCreateObjects();
                 repaint();
                 delta--;
             }
@@ -68,7 +70,7 @@ public class GamePanel extends JPanel implements Runnable {
         final double drawIntervalMovementModifier = drawInterval / Math.pow(10, 7);
         
         // Change player position
-        player.update(keyHandler.getNormalizedDirectionVectorFromKeys(), drawIntervalMovementModifier);
+        player.updatePos(drawIntervalMovementModifier);
 
         System.out.println("Player x: " + player.getDirectionVector()[0] + " y: " + player.getDirectionVector()[1]);
         //Shoot bullet
@@ -91,22 +93,17 @@ public class GamePanel extends JPanel implements Runnable {
         if (Math.floor(Math.random()*100) == 14 && enemies.size() < 15){
             enemies.add(new Enemy((Math.floor(Math.random()*1280)), (Math.floor(Math.random()*720)), 5.0, 5.0));
         }
-
-        /* 
-         * All objects should be created after an update is finished so that they are not updated 
-         * in the current loop
-         */
-        createNewObjects();
     }
 
-    public void createNewObjects() {
+    public void processInputsThatCreateObjects() {
         if (mouseHandler.getMousePressed()) {
             if (System.nanoTime() - 1e8 > lastBulletTime) {
                 System.out.println("Bullet shot");
 
                 // Initialize bullet
                 Bullet bullet = new Bullet(player.getPosX(), player.getPosY(), 2, 5, 
-                    new double[] {mouseHandler.getX()-player.getPosX(), mouseHandler.getY()-player.getPosY()});
+                    MathHelpers.normalizeVector(new double[] {mouseHandler.getX() 
+                        - player.getPosX(), mouseHandler.getY() - player.getPosY()}));
                 
 
                 double[] bulletDirectionVector = bullet.getDirectionVector();
@@ -115,11 +112,13 @@ public class GamePanel extends JPanel implements Runnable {
                 // Adjust direction of bullet accounting for velocity of player
                 double[] combinedDirectionVector = MathHelpers.sumVectors(playerDirectionVector, 
                     bulletDirectionVector);
-                double[] normalizedCombinedDirectionVector = MathHelpers.normalizeVector(combinedDirectionVector);
+                double[] normalizedCombinedDirectionVector 
+                    = MathHelpers.normalizeVector(combinedDirectionVector);
                 bullet.setNormalizedDirectionVector(normalizedCombinedDirectionVector);
                 
                 // Set new speed accounting for velocity of player
-                bullet.setSpeed(Math.sqrt(Math.pow(combinedDirectionVector[0], 2) + Math.pow(combinedDirectionVector[1], 2)));
+                bullet.setSpeed(Math.sqrt(Math.pow(
+                    combinedDirectionVector[0], 2) + Math.pow(combinedDirectionVector[1], 2)));
 
                 // Add current bullet to bullets arraylist
                 bullets.add(bullet);
@@ -130,6 +129,11 @@ public class GamePanel extends JPanel implements Runnable {
                 lastBulletTime = System.nanoTime();
             }
         }
+    }
+
+    public void processInputsThatDontCreateObjects() {
+        this.player.setNormalizedDirectionVector(
+            keyHandler.getNormalizedDirectionVectorFromKeys());
     }
 
     @Override
