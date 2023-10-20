@@ -8,6 +8,8 @@ import javax.swing.*;
   
 public class GamePanel extends JPanel implements Runnable {
     final int framesPerSecond = 240;
+    final int horizontalSize = 1280;
+    final int verticalSize = 720;
 
     Player player;
 
@@ -22,7 +24,7 @@ public class GamePanel extends JPanel implements Runnable {
     Thread gameThread;
 
     GamePanel() {
-        this.player = new Player(1280 / 2, 720 / 2, 5, 12);
+        this.player = new Player(horizontalSize / 2, verticalSize / 2, 5, 12);
         this.addKeyListener(keyHandler);
         this.addMouseListener(mouseHandler);
         this.addMouseMotionListener(mouseHandler);
@@ -81,7 +83,7 @@ public class GamePanel extends JPanel implements Runnable {
             Bullet bullet = bullets.get(i);
 
             // Remove bullets at screen border (hardcoded for now)
-            if (bullet.getPosX() >= 1280 || bullet.getPosX() < 0 || bullet.getPosY() >= 720 || bullet.getPosY() < 0) {
+            if (bullet.getPosX() >= horizontalSize || bullet.getPosX() < 0 || bullet.getPosY() >= verticalSize || bullet.getPosY() < 0) {
                 bullets.remove(i);
             }
 
@@ -91,7 +93,7 @@ public class GamePanel extends JPanel implements Runnable {
         // TODO: Enemy movement
         // adding new enemies
         if (Math.floor(Math.random()*100) == 14 && enemies.size() < 15){
-            enemies.add(new Enemy((Math.floor(Math.random()*1280)), (Math.floor(Math.random()*720)), 5.0, 5.0));
+            enemies.add(new Enemy((Math.floor(Math.random()*horizontalSize)), (Math.floor(Math.random()*verticalSize)), 5.0, 5.0));
         }
     }
 
