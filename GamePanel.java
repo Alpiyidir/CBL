@@ -2,6 +2,8 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 import javax.swing.*;
 
   
@@ -73,7 +75,7 @@ public class GamePanel extends JPanel implements Runnable {
         // Change player position
         player.updatePos(drawIntervalMovementModifier);
 
-        System.out.println("Player x: " + player.getDirectionVector()[0] + " y: " + player.getDirectionVector()[1]);
+        //System.out.println("Player x: " + player.getDirectionVector()[0] + " y: " + player.getDirectionVector()[1]);
         //Shoot bullet
         //System.out.println(mouseHandler.getMousePressed());
         
@@ -89,11 +91,40 @@ public class GamePanel extends JPanel implements Runnable {
             bullet.updatePos(drawIntervalMovementModifier);
         }
 
-        // TODO: Enemy movement
+        
         // adding new enemies
-        if (Math.floor(Math.random()*100) == 14 && enemies.size() < 15){
-            enemies.add(new Enemy((Math.floor(Math.random()*horizontalSize)), (Math.floor(Math.random()*verticalSize)), 5.0, 5.0));
+        if (Math.floor(Math.random()*1000) == 14 && enemies.size() < 15){
+
+            System.out.println("enemy spawned");
+            // add enemies randomly to one of the sides of the screen
+            int side = ThreadLocalRandom.current().nextInt(1, 5);
+            System.out.println("Side: " + side);
+            switch(side){
+                //up
+                case 1: 
+                    enemies.add(new Enemy((Math.floor(Math.random()*horizontalSize)), 10.0, 5.0, 10));
+                    break;
+                //right
+                case 2: 
+                    enemies.add(new Enemy(horizontalSize-10, (Math.floor(Math.random()*verticalSize)), 5.0, 10));
+                    break;
+                //down
+                case 3:
+                    enemies.add(new Enemy((Math.floor(Math.random()*horizontalSize)), verticalSize-10.0, 5.0, 10));
+                    break;
+                //left
+                case 4: 
+                    enemies.add(new Enemy(10, (Math.floor(Math.random()*verticalSize)), 5.0, 10));
+                    break;
+            }
         }
+        // TODO: Enemy movement
+        for (int i=0; i< enemies.size(); i++){
+            Enemy curEnemy = enemies.get(i);
+            double[] direction = new double[] {horizontalSize/2.0-curEnemy.getPosX(), verticalSize/2.0-curEnemy.getPosY()};
+            curEnemy.update(MathHelpers.normalizeVector(direction), drawIntervalMovementModifier);
+        }
+
     }
 
     public void processInputsThatCreateObjects() {
