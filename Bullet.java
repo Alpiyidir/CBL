@@ -1,9 +1,6 @@
 public class Bullet extends CircularObject {
-    double[] normalizedDirectionVector;
-
     public Bullet(double xPos, double yPos, double radius, double speed, double[] directionVector) {
-        super(xPos, yPos, radius, speed);
-        this.normalizedDirectionVector = MathHelpers.normalizeVector(directionVector);
+        super(xPos, yPos, radius, speed, directionVector);
     }
 
     double[] getNormalizedDirectionVector() {

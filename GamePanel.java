@@ -94,7 +94,7 @@ public class GamePanel extends JPanel implements Runnable {
         if (mouseHandler.getMousePressed()) {
             if (System.nanoTime() - 1e8 > lastBulletTime) {
                 System.out.println("Bullet shot");
-                bullets.add(new Bullet(player.getPosX(), player.getPosY(), 5, 5, new double[] {mouseHandler.getX()-player.getPosX(), mouseHandler.getY()-player.getPosY()}));
+                bullets.add(new Bullet(player.getPosX(), player.getPosY(), 5, 2, new double[] {mouseHandler.getX()-player.getPosX(), mouseHandler.getY()-player.getPosY()}));
 
                 /*System.out.println(mouseHandler.getX());
                 System.out.println(mouseHandler.getX()-player.getXPos());
@@ -104,7 +104,7 @@ public class GamePanel extends JPanel implements Runnable {
         }
     }
 
-
+    @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
 

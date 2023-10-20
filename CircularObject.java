@@ -3,12 +3,18 @@ abstract class CircularObject {
     private double posY;
     private double radius;
     private double speed;
+    private double[] normalizedDirectionVector;
 
     CircularObject(double posX, double posY, double radius, double speed) {
         this.posX = posX;
         this.posY = posY;
         this.radius = radius;
         this.speed = speed;
+    }
+
+    CircularObject(double posX, double posY, double radius, double speed, double[] directionVector) {
+        this(posX, posY, radius, speed);
+        this.normalizedDirectionVector = MathHelpers.normalizeVector(directionVector);
     }
 
     // Default getters/setters

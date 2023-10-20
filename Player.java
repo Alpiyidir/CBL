@@ -1,4 +1,6 @@
 class Player extends CircularObject {
+    double[] directionVector;
+    
     Player(double xPos, double yPos, double radius, double speed) {
         super(xPos, yPos, radius, speed);
     }
