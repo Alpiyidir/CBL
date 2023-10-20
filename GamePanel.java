@@ -115,8 +115,7 @@ public class GamePanel extends JPanel implements Runnable {
                 // Adjust direction of bullet accounting for velocity of player
                 double[] combinedDirectionVector = MathHelpers.sumVectors(playerDirectionVector, 
                     bulletDirectionVector);
-                double[] normalizedCombinedDirectionVector 
-                    = MathHelpers.normalizeVector(combinedDirectionVector);
+                double[] normalizedCombinedDirectionVector = MathHelpers.normalizeVector(combinedDirectionVector);
                 bullet.setNormalizedDirectionVector(normalizedCombinedDirectionVector);
                 
                 // Set new speed accounting for velocity of player

@@ -3,8 +3,6 @@ abstract class CircularObject {
     private double posY;
     private double speed;
     private double radius;
-    
-
 
     CircularObject(double posX, double posY, double speed, double radius) {
         this.posX = posX;
