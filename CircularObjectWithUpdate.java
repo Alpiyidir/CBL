@@ -1,5 +1,3 @@
-import java.awt.Rectangle;
-
 abstract class CircularObjectWithUpdate extends CircularObject {
 
 

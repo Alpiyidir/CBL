@@ -41,8 +41,8 @@ public class MouseHandler implements MouseListener, MouseMotionListener {
 
     @Override
     public void mouseMoved(MouseEvent e) {
-      this.posX = e.getX();
-      this.posY = e.getY();
+        this.posX = e.getX();
+        this.posY = e.getY();
     }
 
     @Override

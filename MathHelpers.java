@@ -1,6 +1,9 @@
 public class MathHelpers {
-    public static double[] normalize2DVector(double x, double y) {
+    public static double[] normalizeVector2D(double x, double y) {
         double magnitude = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
+        if (magnitude == 0) {
+            return new double[]{0, 0};
+        }
         return new double[]{x / magnitude, y / magnitude};
     }
 

@@ -3,10 +3,7 @@ import java.awt.RenderingHints.Key;
 import java.awt.event.ActionEvent;
 import javax.swing.*;
 
-
-
 class MainFrame {
-
     void startGame() {
         JFrame frame = new JFrame ("Game Window");
         GamePanel gamePanel = new GamePanel();

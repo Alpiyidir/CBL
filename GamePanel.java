@@ -1,6 +1,7 @@
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -83,7 +84,7 @@ public class GamePanel extends JPanel implements Runnable {
         for (int i = 0; i < bullets.size(); i++) {
             Bullet bullet = bullets.get(i);
 
-            // Remove bullets at screen border (hardcoded for now)
+            // Remove bullets at screen border
             if (bullet.getPosX() >= horizontalSize || bullet.getPosX() < 0 || bullet.getPosY() >= verticalSize || bullet.getPosY() < 0) {
                 bullets.remove(i);
             }
@@ -93,48 +94,56 @@ public class GamePanel extends JPanel implements Runnable {
 
         
         // adding new enemies
-        if (Math.floor(Math.random()*100) == 14 && enemies.size() < 15){
+        if (Math.floor(Math.random() * 100) == 0 && enemies.size() < 15){
 
             System.out.println("enemy spawned");
             // add enemies randomly to one of the sides of the screen
             int side = ThreadLocalRandom.current().nextInt(1, 5);
             System.out.println("Side: " + side);
-            switch(side){
+            switch (side) {
                 //up
                 case 1: 
-                    enemies.add(new Enemy((Math.floor(Math.random()*horizontalSize)), 10.0, 5.0, 10));
+                    enemies.add(new Enemy((Math.floor(Math.random() * horizontalSize)), 10.0, 5.0, 10));
                     break;
                 //right
                 case 2: 
-                    enemies.add(new Enemy(horizontalSize-10, (Math.floor(Math.random()*verticalSize)), 5.0, 10));
+                    enemies.add(new Enemy(horizontalSize - 10, (Math.floor(Math.random()*verticalSize)), 5.0, 10));
                     break;
                 //down
                 case 3:
-                    enemies.add(new Enemy((Math.floor(Math.random()*horizontalSize)), verticalSize-10.0, 5.0, 10));
+                    enemies.add(new Enemy((Math.floor(Math.random() * horizontalSize)), verticalSize - 10.0, 5.0, 10));
                     break;
                 //left
                 case 4: 
-                    enemies.add(new Enemy(10, (Math.floor(Math.random()*verticalSize)), 5.0, 10));
+                    enemies.add(new Enemy(10, (Math.floor(Math.random() * verticalSize)), 5.0, 10));
+                    break;
+                default:
                     break;
             }
         }
         // Enemy movement
-        for (int i=0; i< enemies.size(); i++){
+        for (int i = 0; i < enemies.size(); i++){
             Enemy curEnemy = enemies.get(i);
-            double[] direction = new double[] {horizontalSize/2.0-curEnemy.getPosX(), verticalSize/2.0-curEnemy.getPosY()};
+            double[] direction = new double[] {horizontalSize / 2.0 - curEnemy.getPosX(), 
+                verticalSize / 2.0 - curEnemy.getPosY()};
             curEnemy.update(MathHelpers.normalizeVector(direction), drawIntervalMovementModifier);
         }
 
         // Collision detection
-        
         for (int i = 0; i < enemies.size(); i++) {
+            boolean enemyHit = false;
             for (int j = 0; j < bullets.size(); j++) {
                 if (enemies.get(i).intersects(bullets.get(j))) {
-                    System.out.println("Collision");
+                    enemies.remove(i);
+                    enemyHit = true;
+                    break;
                 }
             }
-        }
 
+            if (enemyHit) {
+                continue;
+            }
+        }
     }
 
     public void processInputsThatCreateObjects() {
@@ -154,9 +163,7 @@ public class GamePanel extends JPanel implements Runnable {
                 // Adjust direction of bullet accounting for velocity of player
                 double[] combinedDirectionVector = MathHelpers.sumVectors(playerDirectionVector, 
                     bulletDirectionVector);
-                double[] normalizedCombinedDirectionVector 
-                    = MathHelpers.normalizeVector(combinedDirectionVector);
-                bullet.setNormalizedDirectionVector(normalizedCombinedDirectionVector);
+                bullet.setNormalizedDirectionVector(MathHelpers.normalizeVector(combinedDirectionVector));
                 
                 // Set new speed accounting for velocity of player
                 bullet.setSpeed(Math.sqrt(Math.pow(

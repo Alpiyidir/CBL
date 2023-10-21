@@ -1,5 +1,3 @@
-import java.awt.geom.Rectangle2D;
-
 abstract class CircularObject {
     private double posX;
     private double posY;
