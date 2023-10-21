@@ -146,6 +146,7 @@ public class GamePanel extends JPanel implements Runnable {
         // Collision detection between bullets and enemies
         for (int i = 0; i < enemies.size(); i++) {
             boolean enemyHit = false;
+            boolean rocketRemoved = false;
             for (int j = 0; j < bullets.size(); j++) {
                 if (enemies.get(i).intersects(bullets.get(j))) {
                     switch (bullets.get(j).type) {
@@ -154,8 +155,21 @@ public class GamePanel extends JPanel implements Runnable {
                             enemyHit = true;
                             break;
                         case 1: // Rocket - kill enemies in the radius of blast
-
+                            for (int k = 0; k < enemies.size(); k++){
+                                for (int m = 0; m < enemies.size(); m++){
+                                    if (enemies.get(m).intersects(new Bullet(bullets.get(j).getPosX(), bullets.get(j).getPosY(), 0, 100, 0, null))){
+                                        enemies.remove(m);
+                                        break;
+                                    } 
+                                }
+                            }
+                            // Remove rocket
+                            bullets.remove(j);
+                            rocketRemoved = true;
                     }
+                    break;
+                }
+                if (rocketRemoved) {
                     break;
                 }
             }
@@ -230,7 +244,7 @@ public class GamePanel extends JPanel implements Runnable {
                         // Adjust direction of bullet accounting for velocity of player
                         double[] combinedDirectionVector = MathHelpers.sumVectors(playerDirectionVector, 
                             bulletDirectionVector);
-                        bullet.setNormalizedDirectionVector(MathHelpers.normalizeVector(combinedDirectionVector));
+                        //bullet.setNormalizedDirectionVector(MathHelpers.normalizeVector(combinedDirectionVector));
                         
                         // Set new speed accounting for velocity of player
                         bullet.setSpeed(Math.sqrt(Math.pow(
