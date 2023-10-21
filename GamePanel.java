@@ -23,6 +23,8 @@ public class GamePanel extends JPanel implements Runnable {
 
     int planetHealth = 25;
 
+    int currentWeapon = 1; // 0 - AR; 1 - Bazooka; 2 - the laser thingy
+
     long lastBulletTime = System.nanoTime();
 
     KeyHandler keyHandler = new KeyHandler();
@@ -146,8 +148,14 @@ public class GamePanel extends JPanel implements Runnable {
             boolean enemyHit = false;
             for (int j = 0; j < bullets.size(); j++) {
                 if (enemies.get(i).intersects(bullets.get(j))) {
-                    enemies.remove(i);
-                    enemyHit = true;
+                    switch (bullets.get(j).type) {
+                        case 0: // Normal bullet - just kill the enemy
+                            enemies.remove(i);
+                            enemyHit = true;
+                            break;
+                        case 1: // Rocket - kill enemies in the radius of blast
+
+                    }
                     break;
                 }
             }
@@ -175,34 +183,67 @@ public class GamePanel extends JPanel implements Runnable {
 
     public void processInputsThatCreateObjects() {
         if (mouseHandler.getMousePressed()) {
-            if (System.nanoTime() - 1e8 > lastBulletTime) {
-                System.out.println("Bullet shot");
+            switch(currentWeapon){
+                case 0: // Assault Rifle
+                    if (System.nanoTime() - 1e8 > lastBulletTime) {
+                        System.out.println("Bullet shot");
 
-                // Initialize bullet
-                Bullet bullet = new Bullet(player.getPosX(), player.getPosY(), 7, 5, 
-                    MathHelpers.normalizeVector(new double[] {mouseHandler.getX() 
-                        - player.getPosX(), mouseHandler.getY() - player.getPosY()}));
-                
+                        // Initialize bullet
+                        Bullet bullet = new Bullet(player.getPosX(), player.getPosY(), 7, 5, 0,
+                            MathHelpers.normalizeVector(new double[] {mouseHandler.getX() 
+                                - player.getPosX(), mouseHandler.getY() - player.getPosY()}));
+                        
 
-                double[] bulletDirectionVector = bullet.getDirectionVector();
-                double[] playerDirectionVector = player.getDirectionVector();
-                
-                // Adjust direction of bullet accounting for velocity of player
-                double[] combinedDirectionVector = MathHelpers.sumVectors(playerDirectionVector, 
-                    bulletDirectionVector);
-                bullet.setNormalizedDirectionVector(MathHelpers.normalizeVector(combinedDirectionVector));
-                
-                // Set new speed accounting for velocity of player
-                bullet.setSpeed(Math.sqrt(Math.pow(
-                    combinedDirectionVector[0], 2) + Math.pow(combinedDirectionVector[1], 2)));
+                        double[] bulletDirectionVector = bullet.getDirectionVector();
+                        double[] playerDirectionVector = player.getDirectionVector();
+                        
+                        // Adjust direction of bullet accounting for velocity of player
+                        double[] combinedDirectionVector = MathHelpers.sumVectors(playerDirectionVector, 
+                            bulletDirectionVector);
+                        bullet.setNormalizedDirectionVector(MathHelpers.normalizeVector(combinedDirectionVector));
+                        
+                        // Set new speed accounting for velocity of player
+                        bullet.setSpeed(Math.sqrt(Math.pow(
+                            combinedDirectionVector[0], 2) + Math.pow(combinedDirectionVector[1], 2)));
 
-                // Add current bullet to bullets arraylist
-                bullets.add(bullet);
+                        // Add current bullet to bullets arraylist
+                        bullets.add(bullet);
 
-                /*System.out.println(mouseHandler.getX());
-                System.out.println(mouseHandler.getX()-player.getXPos());
-                System.out.println(mouseHandler.getX()-player.getXPos());*/
-                lastBulletTime = System.nanoTime();
+                        /*System.out.println(mouseHandler.getX());
+                        System.out.println(mouseHandler.getX()-player.getXPos());
+                        System.out.println(mouseHandler.getX()-player.getXPos());*/
+                        lastBulletTime = System.nanoTime();
+                    }
+                case 1: // Bazooka
+                    if (System.nanoTime() - 5*1e8 > lastBulletTime) {
+                        System.out.println("Rocket shot");
+
+                        // Initialize bullet
+                        Bullet bullet = new Bullet(player.getPosX(), player.getPosY(), 4, 5, 1,
+                            MathHelpers.normalizeVector(new double[] {mouseHandler.getX() 
+                                - player.getPosX(), mouseHandler.getY() - player.getPosY()}));
+                        
+
+                        double[] bulletDirectionVector = bullet.getDirectionVector();
+                        double[] playerDirectionVector = player.getDirectionVector();
+                        
+                        // Adjust direction of bullet accounting for velocity of player
+                        double[] combinedDirectionVector = MathHelpers.sumVectors(playerDirectionVector, 
+                            bulletDirectionVector);
+                        bullet.setNormalizedDirectionVector(MathHelpers.normalizeVector(combinedDirectionVector));
+                        
+                        // Set new speed accounting for velocity of player
+                        bullet.setSpeed(Math.sqrt(Math.pow(
+                            combinedDirectionVector[0], 2) + Math.pow(combinedDirectionVector[1], 2)));
+
+                        // Add current bullet to bullets arraylist
+                        bullets.add(bullet);
+
+                        /*System.out.println(mouseHandler.getX());
+                        System.out.println(mouseHandler.getX()-player.getXPos());
+                        System.out.println(mouseHandler.getX()-player.getXPos());*/
+                        lastBulletTime = System.nanoTime();
+                    }
             }
         }
     }
@@ -222,7 +263,14 @@ public class GamePanel extends JPanel implements Runnable {
 
         // Paint all bullets
         for (int i = 0; i < bullets.size(); i++) {
+            
             Bullet bullet = bullets.get(i);
+            if (bullet.type == 0) {
+                g.setColor(Color.gray);
+            }
+            else {
+                g.setColor(Color.orange);
+            }
             double bulletRadius = bullet.getRadius();
             g.fillOval((int) (bullet.getPosX() - bulletRadius), (int) (bullet.getPosY() - bulletRadius), (int) bulletRadius * 2, (int) bulletRadius * 2);
         }

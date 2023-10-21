@@ -1,7 +1,10 @@
 public class Bullet extends CircularObjectWithUpdate {
 
-    public Bullet(double xPos, double yPos, double speed, double radius, double[] normalizedDirectionVector) {
+    int type;
+
+    public Bullet(double xPos, double yPos, double speed, double radius, int type, double[] normalizedDirectionVector) {
         super(xPos, yPos, speed, radius, normalizedDirectionVector);
+        this.type = type;
     }
 
     // Adds aim cone to bullet
