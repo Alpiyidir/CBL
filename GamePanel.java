@@ -21,14 +21,14 @@ public class GamePanel extends JPanel implements Runnable {
 
     ArrayList<Bullet> bullets = new ArrayList<Bullet>();
 
-    int planetHealth = 500;
+    int planetHealth = 25;
 
     long lastBulletTime = System.nanoTime();
 
     KeyHandler keyHandler = new KeyHandler();
     MouseHandler mouseHandler = new MouseHandler();
 
-    JTextArea textField = new JTextArea("Health: 500");
+    JTextArea textField = new JTextArea("Health: " + planetHealth);
     
 
     Thread gameThread;
@@ -155,7 +155,7 @@ public class GamePanel extends JPanel implements Runnable {
                 continue;
             }
         }
-        System.out.println(planetHealth);
+        
 
         // Collision detection between enemies and the planet
         for (int i = 0; i < enemies.size(); i++) {
