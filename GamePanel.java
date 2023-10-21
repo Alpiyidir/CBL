@@ -216,9 +216,9 @@ public class GamePanel extends JPanel implements Runnable {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        // Paint player
-        double playerRadius = player.getRadius();
-        g.fillOval((int) (player.getPosX() - playerRadius), (int) (player.getPosY() - playerRadius), (int) playerRadius * 2, (int) playerRadius * 2);
+        // Paint the planet
+        g.setColor(Color.GREEN);
+        g.fillOval(horizontalSize/2-(int)planet.getRadius(), verticalSize/2-(int)planet.getRadius(), (int)planet.getRadius()*2, (int)planet.getRadius()*2);
 
         // Paint all bullets
         for (int i = 0; i < bullets.size(); i++) {
@@ -227,7 +227,6 @@ public class GamePanel extends JPanel implements Runnable {
             g.fillOval((int) (bullet.getPosX() - bulletRadius), (int) (bullet.getPosY() - bulletRadius), (int) bulletRadius * 2, (int) bulletRadius * 2);
         }
 
-        
         // Paint all enemies
         g.setColor(Color.RED);
         for (int i = 0; i < enemies.size(); i++) {
@@ -236,9 +235,8 @@ public class GamePanel extends JPanel implements Runnable {
             g.fillOval((int) (enemy.getPosX() - enemyRadius), (int) (enemy.getPosY() - enemyRadius), (int) enemyRadius * 2, (int) enemyRadius * 2);
         }
 
-        //Pain the planet
-        g.setColor(Color.GREEN);
-        g.fillOval(horizontalSize/2-(int)planet.getRadius(), verticalSize/2-(int)planet.getRadius(), (int)planet.getRadius()*2, (int)planet.getRadius()*2);
+        // Paint player
+        double playerRadius = player.getRadius();
+        g.fillOval((int) (player.getPosX() - playerRadius), (int) (player.getPosY() - playerRadius), (int) playerRadius * 2, (int) playerRadius * 2);
     }
-
 }
