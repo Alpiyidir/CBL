@@ -11,8 +11,9 @@ public class Bullet extends CircularObjectWithUpdate {
     @Override
     public void setNormalizedDirectionVector(double[] normalizedDirectionVector) {
         double[] normalVector = new double[]{normalizedDirectionVector[1], -normalizedDirectionVector[0]};
-        double degree = Math.PI / 180;
-        double offsetMultiplierPerUnitLength = Math.tan(2 * degree);
+        double degreeInRadians = Math.PI / 180;
+        double inaccuracyInDegrees = 5 * degreeInRadians;
+        double offsetMultiplierPerUnitLength = Math.tan(inaccuracyInDegrees);
         double offsetDirection = Math.random() * 2 - 1;
         normalVector[0] *= offsetMultiplierPerUnitLength * offsetDirection;
         normalVector[1] *= offsetMultiplierPerUnitLength * offsetDirection;
