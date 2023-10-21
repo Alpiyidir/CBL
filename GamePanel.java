@@ -220,6 +220,7 @@ public class GamePanel extends JPanel implements Runnable {
         g.setColor(Color.GREEN);
         g.fillOval(horizontalSize/2-(int)planet.getRadius(), verticalSize/2-(int)planet.getRadius(), (int)planet.getRadius()*2, (int)planet.getRadius()*2);
 
+        g.setColor(Color.BLACK);
         // Paint all bullets
         for (int i = 0; i < bullets.size(); i++) {
             Bullet bullet = bullets.get(i);
@@ -236,6 +237,7 @@ public class GamePanel extends JPanel implements Runnable {
         }
 
         // Paint player
+        g.setColor(Color.ORANGE);
         double playerRadius = player.getRadius();
         g.fillOval((int) (player.getPosX() - playerRadius), (int) (player.getPosY() - playerRadius), (int) playerRadius * 2, (int) playerRadius * 2);
     }
