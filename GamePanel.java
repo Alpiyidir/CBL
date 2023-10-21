@@ -15,23 +15,35 @@ public class GamePanel extends JPanel implements Runnable {
 
     Player player;
 
+    CircularObject planet = new Player(horizontalSize / 2, verticalSize / 2, 0, 40);
+
     ArrayList<Enemy> enemies = new ArrayList<Enemy>();
 
     ArrayList<Bullet> bullets = new ArrayList<Bullet>();
+
+    int planetHealth = 500;
+
     long lastBulletTime = System.nanoTime();
 
     KeyHandler keyHandler = new KeyHandler();
     MouseHandler mouseHandler = new MouseHandler();
 
+    JTextArea textField = new JTextArea("Health: 500");
+    
+
     Thread gameThread;
 
     GamePanel() {
+        
         this.player = new Player(horizontalSize / 2, verticalSize / 2, 2, 12);
         this.addKeyListener(keyHandler);
         this.addMouseListener(mouseHandler);
         this.addMouseMotionListener(mouseHandler);
+        this.add(textField);
         Color lightBlue = new Color(50, 133, 168);
         this.setBackground(lightBlue);
+        textField.setBackground(lightBlue);
+        textField.setFont(textField.getFont().deriveFont(30f));
         this.setFocusable(true);
     }
 
@@ -129,7 +141,7 @@ public class GamePanel extends JPanel implements Runnable {
             curEnemy.update(MathHelpers.normalizeVector(direction), drawIntervalMovementModifier);
         }
 
-        // Collision detection
+        // Collision detection between bullets and enemies
         for (int i = 0; i < enemies.size(); i++) {
             boolean enemyHit = false;
             for (int j = 0; j < bullets.size(); j++) {
@@ -139,7 +151,22 @@ public class GamePanel extends JPanel implements Runnable {
                     break;
                 }
             }
+            if (enemyHit) {
+                continue;
+            }
+        }
+        System.out.println(planetHealth);
 
+        // Collision detection between enemies and the planet
+        for (int i = 0; i < enemies.size(); i++) {
+            boolean enemyHit = false;
+            if (enemies.get(i).intersects(planet)) {
+                enemies.remove(i);
+                planetHealth -= 1;
+                textField.setText("Health: " + planetHealth);
+                enemyHit = true;
+                break;
+            }
             if (enemyHit) {
                 continue;
             }
@@ -200,12 +227,18 @@ public class GamePanel extends JPanel implements Runnable {
             g.fillOval((int) (bullet.getPosX() - bulletRadius), (int) (bullet.getPosY() - bulletRadius), (int) bulletRadius * 2, (int) bulletRadius * 2);
         }
 
+        
         // Paint all enemies
+        g.setColor(Color.RED);
         for (int i = 0; i < enemies.size(); i++) {
             Enemy enemy = enemies.get(i);
             double enemyRadius = enemy.getRadius();
             g.fillOval((int) (enemy.getPosX() - enemyRadius), (int) (enemy.getPosY() - enemyRadius), (int) enemyRadius * 2, (int) enemyRadius * 2);
         }
+
+        //Pain the planet
+        g.setColor(Color.GREEN);
+        g.fillOval(horizontalSize/2-(int)planet.getRadius(), verticalSize/2-(int)planet.getRadius(), (int)planet.getRadius()*2, (int)planet.getRadius()*2);
     }
 
 }
