@@ -21,6 +21,8 @@ public class GamePanel extends JPanel implements Runnable {
 
     ArrayList<Bullet> bullets = new ArrayList<Bullet>();
 
+    ArrayList<Explosion> explosions = new ArrayList<Explosion>();
+
     int planetHealth = 25;
 
     int currentWeapon = 1; // 0 - AR; 1 - Bazooka; 2 - the laser thingy
@@ -89,6 +91,8 @@ public class GamePanel extends JPanel implements Runnable {
         
         // Change player position
         player.updatePos(drawIntervalMovementModifier);
+
+        // Set current weapon type
         currentWeapon = keyHandler.getCurrentWeapon();
 
         //System.out.println("Player x: " + player.getDirectionVector()[0] + " y: " + player.getDirectionVector()[1]);
@@ -150,7 +154,8 @@ public class GamePanel extends JPanel implements Runnable {
             boolean rocketRemoved = false;
             for (int j = 0; j < bullets.size(); j++) {
                 if (enemies.get(i).intersects(bullets.get(j))) {
-                    switch (bullets.get(j).type) {
+                    Bullet currBullet = bullets.get(j);
+                    switch (currBullet.type) {
                         case 0: // Normal bullet - just kill the enemy
                             enemies.remove(i);
                             enemyHit = true;
@@ -158,12 +163,16 @@ public class GamePanel extends JPanel implements Runnable {
                         case 1: // Rocket - kill enemies in the radius of blast
                             for (int k = 0; k < enemies.size(); k++){
                                 for (int m = 0; m < enemies.size(); m++){
-                                    if (enemies.get(m).intersects(new Bullet(bullets.get(j).getPosX(), bullets.get(j).getPosY(), 0, 100, 0, null))){
+                                    if (enemies.get(m).intersects(new Bullet(currBullet.getPosX(), currBullet.getPosY(), 0, 100, 0, null))){
                                         enemies.remove(m);
                                         break;
                                     } 
                                 }
                             }
+                            
+                            // Create explosion
+                            explosions.add(new Explosion(currBullet.getPosX(), currBullet.getPosY(), 0, 100, System.nanoTime()));
+
                             // Remove rocket
                             bullets.remove(j);
                             rocketRemoved = true;
@@ -192,6 +201,16 @@ public class GamePanel extends JPanel implements Runnable {
             }
             if (enemyHit) {
                 continue;
+            }
+        }
+
+        // Deleting explosions
+        for (int i = 0; i < 3; i++){
+            for (int j = 0; j < explosions.size(); j++){
+                if(System.nanoTime() - 3*1e8 > explosions.get(j).getTimeCreated()){
+                    explosions.remove(j);
+                    break;
+                }
             }
         }
     }
@@ -297,6 +316,13 @@ public class GamePanel extends JPanel implements Runnable {
             Enemy enemy = enemies.get(i);
             double enemyRadius = enemy.getRadius();
             g.fillOval((int) (enemy.getPosX() - enemyRadius), (int) (enemy.getPosY() - enemyRadius), (int) enemyRadius * 2, (int) enemyRadius * 2);
+        }
+
+        // Paint all explosions
+        g.setColor(Color.red);
+        for (int i = 0; i < explosions.size(); i++) {
+            Explosion currExplosion = explosions.get(i);
+            g.fillOval((int)(currExplosion.getPosX()-currExplosion.getRadius()), (int)(currExplosion.getPosY()-currExplosion.getRadius()), (int) currExplosion.getRadius()*2, (int) currExplosion.getRadius()*2);
         }
 
         // Paint player
