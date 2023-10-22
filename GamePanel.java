@@ -322,7 +322,9 @@ public class GamePanel extends JPanel implements Runnable {
         g.setColor(Color.red);
         for (int i = 0; i < explosions.size(); i++) {
             Explosion currExplosion = explosions.get(i);
-            g.fillOval((int)(currExplosion.getPosX()-currExplosion.getRadius()), (int)(currExplosion.getPosY()-currExplosion.getRadius()), (int) currExplosion.getRadius()*2, (int) currExplosion.getRadius()*2);
+            int size = ((int)Math.floor(((System.nanoTime() - currExplosion.getTimeCreated()) /100000.0 / (3*1e3)) * currExplosion.getRadius()*2));
+
+            g.fillOval((int)(currExplosion.getPosX()-size/2.0), (int)(currExplosion.getPosY()-size/2.0), (int)size, (int)size);
         }
 
         // Paint player
