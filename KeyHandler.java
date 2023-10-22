@@ -3,6 +3,7 @@ import java.awt.event.*;
 public class KeyHandler implements KeyListener {
     
     private boolean rightPressed, leftPressed, upPressed, downPressed, spacePressed;
+    private int weaponType;
 
     @Override
     public void keyTyped(KeyEvent e) {
@@ -27,6 +28,12 @@ public class KeyHandler implements KeyListener {
         }
         if (code == KeyEvent.VK_SPACE) {
             spacePressed = true;
+        }
+        if (code == KeyEvent.VK_1) {
+            weaponType = 0;
+        }
+        if (code == KeyEvent.VK_2) {
+            weaponType = 1;
         }
     }
 
@@ -53,6 +60,10 @@ public class KeyHandler implements KeyListener {
 
     public boolean[] getKeysPressed() {
         return new boolean[]{upPressed, downPressed, leftPressed, rightPressed};
+    }
+
+    public int getCurrentWeapon(){
+        return weaponType;
     }
 
     public double[] getNormalizedDirectionVectorFromKeys() {

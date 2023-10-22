@@ -89,6 +89,7 @@ public class GamePanel extends JPanel implements Runnable {
         
         // Change player position
         player.updatePos(drawIntervalMovementModifier);
+        currentWeapon = keyHandler.getCurrentWeapon();
 
         //System.out.println("Player x: " + player.getDirectionVector()[0] + " y: " + player.getDirectionVector()[1]);
         //Shoot bullet
