@@ -63,7 +63,7 @@ public class GamePanel extends JPanel implements Runnable {
         long lastTime = System.nanoTime();
         long currentTime;
 
-        while (gameThread != null) {
+        while (!gameThread.isInterrupted()) {
 
             currentTime = System.nanoTime();
 
@@ -79,6 +79,12 @@ public class GamePanel extends JPanel implements Runnable {
                 delta--;
             }
         }
+
+        if (gameThread.isInterrupted()) {
+            // On termination of GameWindow, this executes
+
+            this.setVisible(false);
+        }
     }
 
     public void update(double drawInterval) {
@@ -89,6 +95,11 @@ public class GamePanel extends JPanel implements Runnable {
          */
         final double drawIntervalMovementModifier = drawInterval / Math.pow(10, 7);
         
+        // Terminate game if health is smaller than or equal to zero
+        if (planetHealth <= 0) {
+            gameThread.interrupt();
+        }
+
         // Change player position
         player.updatePos(drawIntervalMovementModifier);
 
@@ -207,7 +218,7 @@ public class GamePanel extends JPanel implements Runnable {
         // Deleting explosions
         for (int i = 0; i < 3; i++){
             for (int j = 0; j < explosions.size(); j++){
-                if(System.nanoTime() - 3*1e8 > explosions.get(j).getTimeCreated()){
+                if(System.nanoTime() - 2e8 > explosions.get(j).getTimeCreated()){
                     explosions.remove(j);
                     break;
                 }
@@ -322,7 +333,7 @@ public class GamePanel extends JPanel implements Runnable {
         g.setColor(Color.red);
         for (int i = 0; i < explosions.size(); i++) {
             Explosion currExplosion = explosions.get(i);
-            int size = ((int)Math.floor(((System.nanoTime() - currExplosion.getTimeCreated()) /100000.0 / (3*1e3)) * currExplosion.getRadius()*2));
+            int size = ((int)Math.floor(((System.nanoTime() - currExplosion.getTimeCreated()) /100000.0 / (2*1e3)) * currExplosion.getRadius()*2));
 
             g.fillOval((int)(currExplosion.getPosX()-size/2.0), (int)(currExplosion.getPosY()-size/2.0), (int)size, (int)size);
         }

@@ -7,7 +7,7 @@ public class Bullet extends CircularObjectWithUpdate {
         this.type = type;
     }
 
-    // Adds aim cone to bullet
+    // Adds aim triangle to bullet
     @Override
     public void setNormalizedDirectionVector(double[] normalizedDirectionVector) {
         double[] normalVector = new double[]{normalizedDirectionVector[1], -normalizedDirectionVector[0]};
