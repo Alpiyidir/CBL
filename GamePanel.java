@@ -1,7 +1,6 @@
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -15,15 +14,13 @@ public class GamePanel extends JPanel implements Runnable {
 
     Player player;
 
-    CircularObject planet = new Player(horizontalSize / 2, verticalSize / 2, 0, 40);
+    Planet planet = new Planet(horizontalSize / 2, verticalSize / 2, 0, 40, 25);
 
     ArrayList<Enemy> enemies = new ArrayList<Enemy>();
 
     ArrayList<Bullet> bullets = new ArrayList<Bullet>();
 
     ArrayList<Explosion> explosions = new ArrayList<Explosion>();
-
-    int planetHealth = 25;
 
     int currentWeapon = 1; // 0 - AR; 1 - Bazooka; 2 - the laser thingy
 
@@ -32,7 +29,7 @@ public class GamePanel extends JPanel implements Runnable {
     KeyHandler keyHandler = new KeyHandler();
     MouseHandler mouseHandler = new MouseHandler();
 
-    JTextArea textField = new JTextArea("Health: " + planetHealth);
+    JTextArea textField = new JTextArea("Health: " + planet.getHealth());
     
 
     Thread gameThread;
@@ -96,7 +93,7 @@ public class GamePanel extends JPanel implements Runnable {
         final double drawIntervalMovementModifier = drawInterval / Math.pow(10, 7);
         
         // Terminate game if health is smaller than or equal to zero
-        if (planetHealth <= 0) {
+        if (planet.getHealth() <= 0) {
             gameThread.interrupt();
         }
 
@@ -124,7 +121,7 @@ public class GamePanel extends JPanel implements Runnable {
 
         
         // adding new enemies
-        if (Math.floor(Math.random() * 100) == 0 && enemies.size() < 15){
+        if (Math.floor(ThreadLocalRandom.current().nextInt(0, 100)) == 0 && enemies.size() < 15){
 
             System.out.println("enemy spawned");
             // add enemies randomly to one of the sides of the screen
@@ -133,19 +130,19 @@ public class GamePanel extends JPanel implements Runnable {
             switch (side) {
                 //up
                 case 1: 
-                    enemies.add(new Enemy((Math.floor(Math.random() * horizontalSize)), 10.0, 5.0, 10));
+                    enemies.add(new Enemy((Math.floor(ThreadLocalRandom.current().nextInt(0, horizontalSize))), 10.0, 5.0, 10));
                     break;
                 //right
                 case 2: 
-                    enemies.add(new Enemy(horizontalSize - 10, (Math.floor(Math.random()*verticalSize)), 5.0, 10));
+                    enemies.add(new Enemy(horizontalSize - 10, (Math.floor(ThreadLocalRandom.current().nextInt(0, verticalSize))), 5.0, 10));
                     break;
                 //down
                 case 3:
-                    enemies.add(new Enemy((Math.floor(Math.random() * horizontalSize)), verticalSize - 10.0, 5.0, 10));
+                    enemies.add(new Enemy((Math.floor(ThreadLocalRandom.current().nextInt(0, horizontalSize))), verticalSize - 10.0, 5.0, 10));
                     break;
                 //left
                 case 4: 
-                    enemies.add(new Enemy(10, (Math.floor(Math.random() * verticalSize)), 5.0, 10));
+                    enemies.add(new Enemy(10, (Math.floor(ThreadLocalRandom.current().nextInt(0, verticalSize))), 5.0, 10));
                     break;
                 default:
                     break;
@@ -172,7 +169,7 @@ public class GamePanel extends JPanel implements Runnable {
                             enemyHit = true;
                             break;
                         case 1: // Rocket - kill enemies in the radius of blast
-                            for (int k = 0; k < enemies.size(); k++){
+                            for (int k = 0; k < enemies.size(); k++) {
                                 for (int m = 0; m < enemies.size(); m++){
                                     if (enemies.get(m).intersects(new Bullet(currBullet.getPosX(), currBullet.getPosY(), 0, 100, 0, null))){
                                         enemies.remove(m);
@@ -205,8 +202,8 @@ public class GamePanel extends JPanel implements Runnable {
             boolean enemyHit = false;
             if (enemies.get(i).intersects(planet)) {
                 enemies.remove(i);
-                planetHealth -= 1;
-                textField.setText("Health: " + planetHealth);
+                planet.setHealth(planet.getHealth() - 1);
+                textField.setText("Health: " + planet.getHealth());
                 enemyHit = true;
                 break;
             }
@@ -259,6 +256,7 @@ public class GamePanel extends JPanel implements Runnable {
                         System.out.println(mouseHandler.getX()-player.getXPos());*/
                         lastBulletTime = System.nanoTime();
                     }
+                    break;
                 case 1: // Bazooka
                     if (System.nanoTime() - 5*1e8 > lastBulletTime) {
                         System.out.println("Rocket shot");
@@ -289,6 +287,7 @@ public class GamePanel extends JPanel implements Runnable {
                         System.out.println(mouseHandler.getX()-player.getXPos());*/
                         lastBulletTime = System.nanoTime();
                     }
+                    break;
             }
         }
     }
