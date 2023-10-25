@@ -7,7 +7,7 @@ public class Explosion extends CircularObject {
         this.timeCreated = timeCreated;
     }
 
-    public long getTimeCreated(){
+    public long getTimeCreated() {
         return timeCreated;
     }
 }
