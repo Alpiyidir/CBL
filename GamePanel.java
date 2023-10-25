@@ -171,7 +171,7 @@ public class GamePanel extends JPanel implements Runnable {
                         case 1: // Rocket - kill enemies in the radius of blast
                             for (int k = 0; k < enemies.size(); k++) {
                                 for (int m = 0; m < enemies.size(); m++){
-                                    if (enemies.get(m).intersects(new Bullet(currBullet.getPosX(), currBullet.getPosY(), 0, 100, 0, null))){
+                                    if (enemies.get(m).distanceToPoint(currBullet.getPosX(), currBullet.getPosY()) <= 100){
                                         enemies.remove(m);
                                         break;
                                     } 

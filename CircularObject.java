@@ -75,4 +75,8 @@ abstract class CircularObject {
         double distanceBetweenCircles = Math.sqrt(Math.pow(circularObject.posX - this.posX, 2) + Math.pow(circularObject.posY - this.posY , 2));
         return distanceBetweenCircles <= radiiSum;
     }
+
+    public double distanceToPoint(double x, double y) {
+        return Math.sqrt(Math.pow(x - this.posX, 2) + Math.pow(y - this.posY, 2));
+    }
 }
