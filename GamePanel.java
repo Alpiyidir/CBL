@@ -301,7 +301,7 @@ public class GamePanel extends JPanel implements Runnable {
             
             Bullet bullet = bullets.get(i);
             if (bullet.type == 0) {
-                g.setColor(Color.gray);
+                g.setColor(Color.BLACK);
             }
             else {
                 g.setColor(Color.orange);
