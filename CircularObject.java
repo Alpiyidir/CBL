@@ -72,11 +72,11 @@ abstract class CircularObject {
 
     public boolean intersects(CircularObject circularObject) {
         double radiiSum = circularObject.radius + this.radius;
-        double distanceBetweenCircles = Math.sqrt(Math.pow(circularObject.posX - this.posX, 2) + Math.pow(circularObject.posY - this.posY , 2));
+        double distanceBetweenCircles = Math.sqrt(Math.pow(circularObject.posX - this.getPosX(), 2) + Math.pow(circularObject.posY - this.getPosY() , 2));
         return distanceBetweenCircles <= radiiSum;
     }
 
     public double distanceToPoint(double x, double y) {
-        return Math.sqrt(Math.pow(x - this.posX, 2) + Math.pow(y - this.posY, 2));
+        return Math.sqrt(Math.pow(x - this.getPosX(), 2) + Math.pow(y - this.getPosY(), 2));
     }
 }
