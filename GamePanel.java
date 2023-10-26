@@ -31,25 +31,33 @@ public class GamePanel extends JPanel implements Runnable {
     KeyHandler keyHandler = new KeyHandler();
     MouseHandler mouseHandler = new MouseHandler();
 
-    JTextArea healthTextField = new JTextArea("Health: " + planet.getHealth());
+    JTextArea planetHealthTextField = new JTextArea("Planet health: " + planet.getHealth());
+
+    JTextArea playerHealthTextField = new JTextArea("Player health: " + 5);
     
 
     Thread gameThread;
 
     GamePanel() {
         
-        this.player = new Player(horizontalSize / 2, verticalSize / 2, 2, 12);
+        this.player = new Player(horizontalSize / 2, verticalSize / 2, 2, 12, 5);
         this.addKeyListener(keyHandler);
         this.addMouseListener(mouseHandler);
         this.addMouseMotionListener(mouseHandler);
 
         Color lightBlue = new Color(50, 133, 168);
 
-        this.add(healthTextField);
-        healthTextField.setEditable(false);
-        healthTextField.setBounds(horizontalSize / 2 - 75, 10, 300, 50);
-        healthTextField.setBackground(lightBlue);
-        healthTextField.setFont(healthTextField.getFont().deriveFont(30f));
+        this.add(planetHealthTextField);
+        planetHealthTextField.setEditable(false);
+        planetHealthTextField.setBounds(horizontalSize / 2 - 75, 10, 200, 50);
+        planetHealthTextField.setBackground(lightBlue);
+        planetHealthTextField.setFont(planetHealthTextField.getFont().deriveFont(30f));
+
+        this.add(playerHealthTextField);
+        playerHealthTextField.setEditable(false);
+        playerHealthTextField.setBounds(horizontalSize / 2 + 100, 10, 300, 50);
+        playerHealthTextField.setBackground(lightBlue);
+        playerHealthTextField.setFont(playerHealthTextField.getFont().deriveFont(30f));
 
         this.setBackground(lightBlue);
         this.setFocusable(true);
@@ -186,6 +194,18 @@ public class GamePanel extends JPanel implements Runnable {
             
         }
 
+        // Collision between bullets and player
+        boolean bulletRemoved = false;
+        for (int i = 0; i < bullets.size(); i++){
+            if (bullets.get(i).intersects(player)){
+                player.setHealth(player.getHealth()-1);
+                playerHealthTextField.setText("Player health: " + player.getHealth());
+                // Delete the bullet
+                bullets.remove(i);
+                break;
+            }
+        }
+
         // Collision detection between bullets and enemies
         for (int i = 0; i < enemies.size(); i++) {
             boolean enemyHit = false;
@@ -233,7 +253,7 @@ public class GamePanel extends JPanel implements Runnable {
             if (enemies.get(i).intersects(planet)) {
                 enemies.remove(i);
                 planet.setHealth(planet.getHealth() - 1);
-                healthTextField.setText("Health: " + planet.getHealth());
+                planetHealthTextField.setText("Planet health: " + planet.getHealth());
                 enemyHit = true;
                 break;
             }

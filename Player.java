@@ -1,5 +1,16 @@
 class Player extends CircularObjectWithUpdate {
-    Player(double xPos, double yPos, double speed, double radius) {
+    int health;
+
+    Player(double xPos, double yPos, double speed, double radius, int health) {
         super(xPos, yPos, speed, radius);
+        this.health = health;
+    }
+
+    public int getHealth() {
+        return health;
+    }
+
+    public void setHealth(int health) {
+        this.health = health;
     }
 }
