@@ -12,9 +12,11 @@ public class GamePanel extends JPanel implements Runnable {
     final int horizontalSize = 1280;
     final int verticalSize = 720;
 
+    JButton gameOverButton = new JButton("Game over", null);
+
     Player player;
 
-    Planet planet = new Planet(horizontalSize / 2, verticalSize / 2, 0, 40, 25);
+    Planet planet = new Planet(horizontalSize / 2, verticalSize / 2, 0, 40, 3);
 
     ArrayList<Enemy> enemies = new ArrayList<Enemy>();
 
@@ -29,7 +31,7 @@ public class GamePanel extends JPanel implements Runnable {
     KeyHandler keyHandler = new KeyHandler();
     MouseHandler mouseHandler = new MouseHandler();
 
-    JTextArea textField = new JTextArea("Health: " + planet.getHealth());
+    JTextArea healthTextField = new JTextArea("Health: " + planet.getHealth());
     
 
     Thread gameThread;
@@ -40,12 +42,22 @@ public class GamePanel extends JPanel implements Runnable {
         this.addKeyListener(keyHandler);
         this.addMouseListener(mouseHandler);
         this.addMouseMotionListener(mouseHandler);
-        this.add(textField);
+
         Color lightBlue = new Color(50, 133, 168);
+
+        this.add(healthTextField);
+        healthTextField.setEditable(false);
+        healthTextField.setBounds(horizontalSize / 2 - 75, 10, 300, 50);
+        healthTextField.setBackground(lightBlue);
+        healthTextField.setFont(healthTextField.getFont().deriveFont(30f));
+
         this.setBackground(lightBlue);
-        textField.setBackground(lightBlue);
-        textField.setFont(textField.getFont().deriveFont(30f));
         this.setFocusable(true);
+        this.setLayout(null);
+
+        gameOverButton.setBounds(horizontalSize / 2 - 400/2, verticalSize / 2 - 400/2, 400, 400);
+        gameOverButton.setVisible(false);
+        this.add(gameOverButton);
     }
 
     void startGameThread() {
@@ -78,9 +90,20 @@ public class GamePanel extends JPanel implements Runnable {
         }
 
         if (gameThread.isInterrupted()) {
+            System.out.println("Terminated");
             // On termination of GameWindow, this executes
+            gameOverButton.setVisible(true);
+            gameOverButton.addActionListener(new ActionListener() {
 
-            this.setVisible(false);
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    JComponent comp = (JComponent) e.getSource();
+                    Window win = SwingUtilities.getWindowAncestor(comp);
+                    win.dispose();
+                    new MainFrame().startGame();
+                }
+            });
+            //this.setVisible(false);
         }
     }
 
@@ -203,7 +226,7 @@ public class GamePanel extends JPanel implements Runnable {
             if (enemies.get(i).intersects(planet)) {
                 enemies.remove(i);
                 planet.setHealth(planet.getHealth() - 1);
-                textField.setText("Health: " + planet.getHealth());
+                healthTextField.setText("Health: " + planet.getHealth());
                 enemyHit = true;
                 break;
             }
