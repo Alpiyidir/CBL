@@ -346,6 +346,9 @@ public class GamePanel extends JPanel implements Runnable {
             else {
                 g.setColor(Color.orange);
             }
+            if(!bullet.getKillsEnemy()){
+                g.setColor(Color.PINK);
+            }
             double bulletRadius = bullet.getRadius();
             g.fillOval((int) (bullet.getPosX() - bulletRadius), (int) (bullet.getPosY() - bulletRadius), (int) bulletRadius * 2, (int) bulletRadius * 2);
         }
