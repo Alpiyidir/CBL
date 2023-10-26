@@ -49,13 +49,13 @@ public class GamePanel extends JPanel implements Runnable {
 
         this.add(planetHealthTextField);
         planetHealthTextField.setEditable(false);
-        planetHealthTextField.setBounds(horizontalSize / 2 - 75, 10, 200, 50);
+        planetHealthTextField.setBounds(horizontalSize / 2 - 225, 10, 275, 50);
         planetHealthTextField.setBackground(lightBlue);
         planetHealthTextField.setFont(planetHealthTextField.getFont().deriveFont(30f));
 
         this.add(playerHealthTextField);
         playerHealthTextField.setEditable(false);
-        playerHealthTextField.setBounds(horizontalSize / 2 + 100, 10, 300, 50);
+        playerHealthTextField.setBounds(horizontalSize / 2 + 100, 10, 275, 50);
         playerHealthTextField.setBackground(lightBlue);
         playerHealthTextField.setFont(playerHealthTextField.getFont().deriveFont(30f));
 
@@ -195,9 +195,8 @@ public class GamePanel extends JPanel implements Runnable {
         }
 
         // Collision between bullets and player
-        boolean bulletRemoved = false;
         for (int i = 0; i < bullets.size(); i++){
-            if (bullets.get(i).intersects(player)){
+            if (bullets.get(i).intersects(player) && !bullets.get(i).getKillsEnemy()){
                 player.setHealth(player.getHealth()-1);
                 playerHealthTextField.setText("Player health: " + player.getHealth());
                 // Delete the bullet
