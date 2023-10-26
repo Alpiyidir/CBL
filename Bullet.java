@@ -1,10 +1,12 @@
 public class Bullet extends CircularObjectWithUpdate {
 
     int type;
+    private boolean killsEnemy;
 
-    public Bullet(double xPos, double yPos, double speed, double radius, int type, double[] normalizedDirectionVector) {
+    public Bullet(double xPos, double yPos, double speed, double radius, int type, boolean killsEnemy, double[] normalizedDirectionVector) {
         super(xPos, yPos, speed, radius, normalizedDirectionVector);
         this.type = type;
+        this.killsEnemy = killsEnemy;
     }
 
     // Adds aim triangle to bullet
@@ -19,5 +21,9 @@ public class Bullet extends CircularObjectWithUpdate {
         normalVector[1] *= offsetMultiplierPerUnitLength * offsetDirection;
 
         super.setNormalizedDirectionVector(MathHelpers.normalizeVector(MathHelpers.sumVectors(normalizedDirectionVector, normalVector)));
+    }
+
+    boolean getKillsEnemy(){
+        return killsEnemy;
     }
 }

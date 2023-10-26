@@ -16,7 +16,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     Player player;
 
-    Planet planet = new Planet(horizontalSize / 2, verticalSize / 2, 0, 40, 3);
+    Planet planet = new Planet(horizontalSize / 2, verticalSize / 2, 0, 40, 15);
 
     ArrayList<Enemy> enemies = new ArrayList<Enemy>();
 
@@ -146,10 +146,10 @@ public class GamePanel extends JPanel implements Runnable {
         // adding new enemies
         if (Math.floor(ThreadLocalRandom.current().nextInt(0, 100)) == 0 && enemies.size() < 15){
 
-            System.out.println("enemy spawned");
+            //System.out.println("enemy spawned");
             // add enemies randomly to one of the sides of the screen
             int side = ThreadLocalRandom.current().nextInt(1, 5);
-            System.out.println("Side: " + side);
+            //System.out.println("Side: " + side);
             switch (side) {
                 //up
                 case 1: 
@@ -171,12 +171,19 @@ public class GamePanel extends JPanel implements Runnable {
                     break;
             }
         }
-        // Enemy movement
+        // Enemy movement and bullet shooting
         for (int i = 0; i < enemies.size(); i++){
             Enemy curEnemy = enemies.get(i);
             double[] direction = new double[] {horizontalSize / 2.0 - curEnemy.getPosX(), 
                 verticalSize / 2.0 - curEnemy.getPosY()};
             curEnemy.update(MathHelpers.normalizeVector(direction), drawIntervalMovementModifier);
+
+            Bullet bulletE = curEnemy.shootBullet(player);
+            if (bulletE != null){
+                System.out.println("added enemy bullet");
+                bullets.add(bulletE);
+            }
+            
         }
 
         // Collision detection between bullets and enemies
@@ -184,7 +191,7 @@ public class GamePanel extends JPanel implements Runnable {
             boolean enemyHit = false;
             boolean rocketRemoved = false;
             for (int j = 0; j < bullets.size(); j++) {
-                if (enemies.get(i).intersects(bullets.get(j))) {
+                if (enemies.get(i).intersects(bullets.get(j)) && bullets.get(j).getKillsEnemy()) {
                     Bullet currBullet = bullets.get(j);
                     switch (currBullet.type) {
                         case 0: // Normal bullet - just kill the enemy
@@ -251,10 +258,10 @@ public class GamePanel extends JPanel implements Runnable {
             switch(currentWeapon){
                 case 0: // Assault Rifle
                     if (System.nanoTime() - 1e8 > lastBulletTime) {
-                        System.out.println("Bullet shot");
+                        //System.out.println("Bullet shot");
 
                         // Initialize bullet
-                        Bullet bullet = new Bullet(player.getPosX(), player.getPosY(), 7, 5, 0,
+                        Bullet bullet = new Bullet(player.getPosX(), player.getPosY(), 7, 5, 0, true,
                             MathHelpers.normalizeVector(new double[] {mouseHandler.getX() 
                                 - player.getPosX(), mouseHandler.getY() - player.getPosY()}));
                         
@@ -282,10 +289,10 @@ public class GamePanel extends JPanel implements Runnable {
                     break;
                 case 1: // Bazooka
                     if (System.nanoTime() - 5*1e8 > lastBulletTime) {
-                        System.out.println("Rocket shot");
+                        //System.out.println("Rocket shot");
 
                         // Initialize bullet
-                        Bullet bullet = new Bullet(player.getPosX(), player.getPosY(), 4, 5, 1,
+                        Bullet bullet = new Bullet(player.getPosX(), player.getPosY(), 4, 5, 1, true,
                             MathHelpers.normalizeVector(new double[] {mouseHandler.getX() 
                                 - player.getPosX(), mouseHandler.getY() - player.getPosY()}));
                         
