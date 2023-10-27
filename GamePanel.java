@@ -1,9 +1,15 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import java.util.concurrent.ThreadLocalRandom;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 
 public class GamePanel extends JPanel implements Runnable {
@@ -34,6 +40,9 @@ public class GamePanel extends JPanel implements Runnable {
 
     JTextArea playerHealthTextField = new JTextArea("Player health: " + 5);
     
+    // Images for the sprites
+    BufferedImage imgPlayer = null;
+
 
     Thread gameThread;
 
@@ -63,6 +72,13 @@ public class GamePanel extends JPanel implements Runnable {
         gameOverButton.setBounds(horizontalSize / 2 - 400/2, verticalSize / 2 - 400/2, 400, 400);
         gameOverButton.setVisible(false);
         this.add(gameOverButton);
+        // Images for the sprites
+        try {
+            imgPlayer = toBufferedImage(ImageIO.read(new File("Spaceship.png")).getScaledInstance(40, 40, Image.SCALE_DEFAULT));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     void startGameThread() {
@@ -413,12 +429,45 @@ public class GamePanel extends JPanel implements Runnable {
 
             g.fillOval((int)(currExplosion.getPosX()-size/2.0), (int)(currExplosion.getPosY()-size/2.0), (int)size, (int)size);
         }
-
+        
+        
         // Paint player
         if(player.isAlive){
             g.setColor(Color.ORANGE);
             double playerRadius = player.getRadius();
-            g.fillOval((int) (player.getPosX() - playerRadius), (int) (player.getPosY() - playerRadius), (int) playerRadius * 2, (int) playerRadius * 2);
+            g.drawImage(rotateImage(imgPlayer), (int) (player.getPosX() - playerRadius), (int) (player.getPosY() - playerRadius), null);
         }
     }
+
+    public Image rotateImage(BufferedImage image){
+        // Rotation information
+
+        double rotationRequired = Math.toRadians (45);
+        double locationX = image.getWidth() / 2;
+        double locationY = image.getHeight() / 2;
+        AffineTransform tx = AffineTransform.getRotateInstance(rotationRequired, locationX, locationY);
+        AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_BILINEAR);
+
+        // Drawing the rotated image at the required drawing locations
+        return op.filter(image, null);
+    }
+
+    public static BufferedImage toBufferedImage(Image img)
+{
+    if (img instanceof BufferedImage)
+    {
+        return (BufferedImage) img;
+    }
+
+    // Create a buffered image with transparency
+    BufferedImage bimage = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+
+    // Draw the image on to the buffered image
+    Graphics2D bGr = bimage.createGraphics();
+    bGr.drawImage(img, 0, 0, null);
+    bGr.dispose();
+
+    // Return the buffered image
+    return bimage;
+}
 }
