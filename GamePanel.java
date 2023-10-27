@@ -44,22 +44,19 @@ public class GamePanel extends JPanel implements Runnable {
         this.addMouseListener(mouseHandler);
         this.addMouseMotionListener(mouseHandler);
 
-        
-        Color black = new Color(0, 0, 0);
-
         this.add(planetHealthTextField);
         planetHealthTextField.setEditable(false);
         planetHealthTextField.setBounds(horizontalSize / 2 - 225, 10, 275, 50);
-        planetHealthTextField.setBackground(black);
+        planetHealthTextField.setOpaque(false);
         planetHealthTextField.setFont(planetHealthTextField.getFont().deriveFont(30f));
 
         this.add(playerHealthTextField);
         playerHealthTextField.setEditable(false);
         playerHealthTextField.setBounds(horizontalSize / 2 + 100, 10, 275, 50);
-        playerHealthTextField.setBackground(black);
+        playerHealthTextField.setOpaque(false);
         playerHealthTextField.setFont(playerHealthTextField.getFont().deriveFont(30f));
 
-        this.setBackground(black);
+        this.setBackground(Color.BLACK);
         this.setFocusable(true);
         this.setLayout(null);
 
