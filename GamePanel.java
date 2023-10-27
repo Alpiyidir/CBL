@@ -42,6 +42,7 @@ public class GamePanel extends JPanel implements Runnable {
     
     // Images for the sprites
     BufferedImage imgPlayer = null;
+    double playerAngle = 0;
 
 
     Thread gameThread;
@@ -314,6 +315,17 @@ public class GamePanel extends JPanel implements Runnable {
 
     public void processInputsThatCreateObjects() {
         if (mouseHandler.getMousePressed() && player.isAlive) {
+            // Set the right player angle
+            if((mouseHandler.posX-player.getPosX()) < 0){
+                playerAngle = -Math.atan((mouseHandler.posY-player.getPosY()) / -(double)(mouseHandler.posX-player.getPosX())) - (Math.PI/2.0);
+
+            } else {
+                playerAngle = Math.atan((mouseHandler.posY-player.getPosY()) / (double)(mouseHandler.posX-player.getPosX())) + (Math.PI/2.0);
+
+            }
+
+            
+
             switch(currentWeapon){
                 case 0: // Assault Rifle
                     if (System.nanoTime() - 1e8 > lastBulletTime) {
@@ -435,14 +447,14 @@ public class GamePanel extends JPanel implements Runnable {
         if(player.isAlive){
             g.setColor(Color.ORANGE);
             double playerRadius = player.getRadius();
-            g.drawImage(rotateImage(imgPlayer), (int) (player.getPosX() - playerRadius), (int) (player.getPosY() - playerRadius), null);
+            g.drawImage(rotateImage(imgPlayer, playerAngle), (int) (player.getPosX() - playerRadius), (int) (player.getPosY() - playerRadius), null);
         }
     }
 
-    public Image rotateImage(BufferedImage image){
+    public Image rotateImage(BufferedImage image, double angle){
         // Rotation information
 
-        double rotationRequired = Math.toRadians (45);
+        double rotationRequired = angle;
         double locationX = image.getWidth() / 2;
         double locationY = image.getHeight() / 2;
         AffineTransform tx = AffineTransform.getRotateInstance(rotationRequired, locationX, locationY);
