@@ -6,7 +6,6 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import javax.swing.*;
 
-  
 public class GamePanel extends JPanel implements Runnable {
     final int framesPerSecond = 240;
     final int horizontalSize = 1280;
@@ -45,21 +44,22 @@ public class GamePanel extends JPanel implements Runnable {
         this.addMouseListener(mouseHandler);
         this.addMouseMotionListener(mouseHandler);
 
-        Color lightBlue = new Color(50, 133, 168);
+        
+        Color black = new Color(0, 0, 0);
 
         this.add(planetHealthTextField);
         planetHealthTextField.setEditable(false);
         planetHealthTextField.setBounds(horizontalSize / 2 - 225, 10, 275, 50);
-        planetHealthTextField.setBackground(lightBlue);
+        planetHealthTextField.setBackground(black);
         planetHealthTextField.setFont(planetHealthTextField.getFont().deriveFont(30f));
 
         this.add(playerHealthTextField);
         playerHealthTextField.setEditable(false);
         playerHealthTextField.setBounds(horizontalSize / 2 + 100, 10, 275, 50);
-        playerHealthTextField.setBackground(lightBlue);
+        playerHealthTextField.setBackground(black);
         playerHealthTextField.setFont(playerHealthTextField.getFont().deriveFont(30f));
 
-        this.setBackground(lightBlue);
+        this.setBackground(black);
         this.setFocusable(true);
         this.setLayout(null);
 
@@ -186,10 +186,10 @@ public class GamePanel extends JPanel implements Runnable {
                 verticalSize / 2.0 - curEnemy.getPosY()};
             curEnemy.update(MathHelpers.normalizeVector(direction), drawIntervalMovementModifier);
 
-            Bullet bulletE = curEnemy.shootBullet(player);
-            if (bulletE != null){
+            Bullet enemyBullet = curEnemy.shootBullet(player);
+            if (enemyBullet != null){
                 System.out.println("added enemy bullet");
-                bullets.add(bulletE);
+                bullets.add(enemyBullet);
             }
             
         }
@@ -360,7 +360,8 @@ public class GamePanel extends JPanel implements Runnable {
             
             Bullet bullet = bullets.get(i);
             if (bullet.type == 0) {
-                g.setColor(Color.BLACK);
+                Color lightBlue = new Color(50, 133, 168);
+                g.setColor(lightBlue);
             }
             else {
                 g.setColor(Color.orange);

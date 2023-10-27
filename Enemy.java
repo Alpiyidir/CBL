@@ -23,10 +23,10 @@ class Enemy extends CircularObject {
     }
 
     public Bullet shootBullet(Player player){
-        if (System.nanoTime() - 7.5*1e8 > lastBulletTime && isShooter){
+        if (System.nanoTime() - 9 * 1e8 > lastBulletTime && isShooter){
             lastBulletTime = System.nanoTime();
             System.out.println("Enemy shot bullet");
-            return new Bullet(this.getPosX(), this.getPosY(), 7.0, 5.0, 0, false, MathHelpers.normalizeVector(new double[] {player.getPosX() - this.getPosX(), player.getPosY() - this.getPosY()}));
+            return new Bullet(this.getPosX(), this.getPosY(), 2.5, 5.0, 0, false, MathHelpers.normalizeVector(new double[] {player.getPosX() - this.getPosX(), player.getPosY() - this.getPosY()}));
         }
         return null;
     }
