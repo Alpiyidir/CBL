@@ -1,68 +1,69 @@
 package game.entities.instance.util;
 
-import game.entities.general.Projectile;
 import game.entities.instance.Bullet;
 import game.entities.instance.Enemy;
 import game.entities.instance.Player;
-import game.entities.instance.Rocket;
 import game.handlers.MouseHandler;
 import game.util.MathHelpers;
 
 public class ProjectileFactory {
-    public static Projectile createProjectilee(Player player, MouseHandler mouseHandler) {
-        double[] playerDirectionVector = player.getDirectionVector();
+    public static Bullet createBullet(Player player, MouseHandler mouseHandler) {
 
-        if (player.getSelectedWeapon() == 0) {
-            // Initialize bullet
-            Bullet bullet = new Bullet(player.getPosX(), player.getPosY(), 7, 5,
-                    MathHelpers.normalizeVector(new double[] { mouseHandler.getX()
-                            - player.getPosX(), mouseHandler.getY() - player.getPosY() }),
-                    player, 0);
-
-            double[] bulletDirectionVector = bullet.getDirectionVector();
-
-            // Adjust direction of bullet accounting for velocity of player
-            double[] combinedDirectionVector = MathHelpers.sumVectors(playerDirectionVector,
-                    bulletDirectionVector);
-            bullet.setNormalizedDirectionVector(MathHelpers.normalizeVector(combinedDirectionVector));
-
-            // Set new speed accounting for velocity of player
-            bullet.setSpeed(Math.sqrt(Math.pow(
-                    combinedDirectionVector[0], 2) + Math.pow(combinedDirectionVector[1], 2)));
-
-            // Set bullet angle
-            bullet.setAngle(mouseHandler.getX(), mouseHandler.getY());
-
-            return bullet;
-        } else if (player.getSelectedWeapon() == 1) {
-            // Initialize rocket
-            Rocket rocket = new Rocket(player.getPosX(), player.getPosY(), 4, 5,
-                    MathHelpers.normalizeVector(new double[] { mouseHandler.getX()
-                            - player.getPosX(), mouseHandler.getY() - player.getPosY() }),
-                    player, 1);
-            ;
-
-            double[] rocketDirectionVector = rocket.getDirectionVector();
-
-            // Adjust direction of rocket accounting for velocity of player
-            double[] combinedDirectionVector = MathHelpers.sumVectors(playerDirectionVector,
-                    rocketDirectionVector);
-            // bullet.setNormalizedDirectionVector(MathHelpers.normalizeVector(combinedDirectionVector));
-
-            // Set new speed accounting for velocity of player
-            rocket.setSpeed(Math.sqrt(Math.pow(
-                    combinedDirectionVector[0], 2) + Math.pow(combinedDirectionVector[1], 2)));
-
-            // Set bullet angle
-            rocket.setAngle(mouseHandler.getX(), mouseHandler.getY());
-            return rocket;
-        } else {
+        if (System.nanoTime() - 1e8 <= player.getLastBulletTime() && player.getSelectedWeapon() == 0) {
+            return null;
+        } else if (System.nanoTime() - 5 * 1e8 <= player.getLastBulletTime() && player.getSelectedWeapon() == 1) {
             return null;
         }
 
+        player.setLastBulletTime(System.nanoTime());
+
+        double[] playerDirectionVector = player.getDirectionVector();
+
+        double speed;
+        switch (player.getSelectedWeapon()) {
+            case 0:
+                speed = 7;
+                break;
+            case 1:
+                speed = 4;
+                break;
+            default:
+                return null;
+        }
+
+        // Initialize bullet
+        Bullet bullet = new Bullet(player.getPosX(), player.getPosY(), speed, 5,
+                MathHelpers.normalizeVector(new double[] { mouseHandler.getX()
+                        - player.getPosX(), mouseHandler.getY() - player.getPosY() }),
+                player, 0, player.getSelectedWeapon());
+
+        double[] bulletDirectionVector = bullet.getDirectionVector();
+
+        // Adjust direction of bullet accounting for velocity of player
+        double[] combinedDirectionVector = MathHelpers.sumVectors(playerDirectionVector,
+                bulletDirectionVector);
+        bullet.setNormalizedDirectionVector(MathHelpers.normalizeVector(combinedDirectionVector));
+
+        // Set new speed accounting for velocity of player
+        bullet.setSpeed(Math.sqrt(Math.pow(
+                combinedDirectionVector[0], 2) + Math.pow(combinedDirectionVector[1], 2)));
+
+        // Set bullet angle
+        bullet.rotateTowards(mouseHandler.getX(), mouseHandler.getY());
+
+        return bullet;
     }
 
-    public static Projectile createProjectile(Enemy enemy, Player player) {
-        
+    public static Bullet createBullet(Enemy enemy, Player player) {
+        if (System.nanoTime() - 9 * 1e8 > enemy.getLastBulletTime() && enemy.getIsShooter()) {
+            enemy.setLastBulletTime(System.nanoTime());
+            Bullet bullet = new Bullet(enemy.getPosX(), enemy.getPosY(), 2.5, 5.0,
+                    MathHelpers.normalizeVector(
+                            new double[] { player.getPosX() - enemy.getPosX(), player.getPosY() - enemy.getPosY() }),
+                    enemy, 1, 0);
+            bullet.rotateTowards(player.getPosX(), player.getPosY());
+            return bullet;
+        }
+        return null;
     }
 }

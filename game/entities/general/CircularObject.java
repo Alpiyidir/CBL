@@ -23,8 +23,6 @@ public abstract class CircularObject {
     private BufferedImage image;
     private String imagePath;
 
-    private static GameScale scale;
-
     protected CircularObject(double posX, double posY, double speed, double radius) {
         this.posX = posX;
         this.posY = posY;
@@ -68,7 +66,9 @@ public abstract class CircularObject {
         return GameScale.getScaleY();
     }
 
-    public abstract String getImagePath();
+    public String getImagePath() {
+        return this.imagePath;
+    }
 
     public void setPosX(double xPos) {
         this.posX = xPos;
@@ -105,7 +105,7 @@ public abstract class CircularObject {
         this.angle = angle;
     }
 
-    public void setAngle(double posX, double posY) {
+    public void rotateTowards(double posX, double posY) {
         if ((posX - this.getPosX()) < 0) {
             this.setAngle(-Math
                     .atan((posY - this.getPosY())
@@ -176,7 +176,7 @@ public abstract class CircularObject {
                     (int) ((this.getPosY() - image.getHeight() / 2) * getScaleY()), null);
         } else {
             g.fillOval((int) ((this.getPosX() - this.getRadius()) * getScaleX()), (int) ((this.getPosY() - this.getRadius()) * getScaleY()),
-                    (int) (this.getRadius() * 2 * Math.sqrt(Math.pow(getScaleX(), 2) + Math.pow(getScaleY(), 2))), (int) (this.getRadius() * 2 * Math.sqrt(Math.pow(getScaleX(), 2) + Math.pow(getScaleY(), 2))));
+                    (int) (this.getRadius() * 2 * getScaleX()), (int) (this.getRadius() * 2 * getScaleY()));
         }
 
     }

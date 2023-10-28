@@ -9,12 +9,11 @@ public abstract class Projectile extends CircularObjectWithUpdate {
     private CircularObject owner;
     private int spriteNumber;
 
-    static final String BLUE_IMAGE_PATH = ".\\game\\entities\\instance\\sprites\\BlueBullet.png";
-    static final String YELLOW_IMAGE_PATH = ".\\game\\entities\\instance\\sprites\\YellowBullet.png";
-    static final String RED_IMAGE_PATH = ".\\game\\entities\\instance\\sprites\\RedBullet.png";
+    final String BLUE_IMAGE_PATH = ".\\game\\entities\\instance\\sprites\\BlueBullet.png";
+    final String YELLOW_IMAGE_PATH = ".\\game\\entities\\instance\\sprites\\YellowBullet.png";
+    final String RED_IMAGE_PATH = ".\\game\\entities\\instance\\sprites\\RedBullet.png";
 
-    public Projectile(double xPos, double yPos, double speed, double radius, double[] normalizedDirectionVector,
-            CircularObject owner, int spriteNumber) {
+    public Projectile(double xPos, double yPos, double speed, double radius, double[] normalizedDirectionVector, CircularObject owner, int spriteNumber) {
         super(xPos, yPos, speed, radius, normalizedDirectionVector);
         this.owner = owner;
         this.spriteNumber = spriteNumber;

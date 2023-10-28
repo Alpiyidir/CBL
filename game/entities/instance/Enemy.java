@@ -9,10 +9,12 @@ public class Enemy extends CircularObject {
     long lastBulletTime = - (long) 1e10;
     boolean isShooter = false;
 
-    static final String IMAGE_PATH = "./game/entities/instance/sprites/SpaceshipNegative.png";
+    static final String IMAGE_PATH = ".\\game\\entities\\instance\\sprites\\SpaceshipNegative.png";
 
     public Enemy(double xPos, double yPos, double speed, double radius) {
         super(xPos, yPos, speed, radius);
+
+        this.setImagePath(IMAGE_PATH);
         
         Random random = new Random();
         if (random.nextDouble() * 100 > 66.0) {
@@ -21,19 +23,21 @@ public class Enemy extends CircularObject {
         }
     }
 
-    public void updatePos(double[] normalizedDirectionVector, double drawIntervalMovementModifier) {
-        // System.out.println("0: " + normalizedDirectionVector[0] + " 1: " + normalizedDirectionVector[1]);
-        this.addPosX(normalizedDirectionVector[0] * drawIntervalMovementModifier);
-        this.addPosY(normalizedDirectionVector[1] * drawIntervalMovementModifier);
+    public boolean getIsShooter() {
+        return this.isShooter;
     }
 
-    public Bullet shootBullet(Player player){
-        if (System.nanoTime() - 9 * 1e8 > lastBulletTime && isShooter){
-            lastBulletTime = System.nanoTime();
-            System.out.println("Enemy shot bullet");
-            return new Bullet(this.getPosX(), this.getPosY(), 2.5, 5.0, MathHelpers.normalizeVector(new double[] {player.getPosX() - this.getPosX(), player.getPosY() - this.getPosY()}), this, 1);
-        }
-        return null;
+    public long getLastBulletTime() {
+        return this.lastBulletTime;
+    }
+
+    public void setLastBulletTime(long lastBulletTime) {
+        this.lastBulletTime = lastBulletTime;
+    }
+
+    public void updatePos(double[] normalizedDirectionVector, double drawIntervalMovementModifier) {
+        this.addPosX(normalizedDirectionVector[0] * drawIntervalMovementModifier);
+        this.addPosY(normalizedDirectionVector[1] * drawIntervalMovementModifier);
     }
 
     @Override
