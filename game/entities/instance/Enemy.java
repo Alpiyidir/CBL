@@ -31,14 +31,13 @@ public class Enemy extends CircularObject {
         if (System.nanoTime() - 9 * 1e8 > lastBulletTime && isShooter){
             lastBulletTime = System.nanoTime();
             System.out.println("Enemy shot bullet");
-            return new Bullet(this.getPosX(), this.getPosY(), 2.5, 5.0, 0, this, MathHelpers.normalizeVector(new double[] {player.getPosX() - this.getPosX(), player.getPosY() - this.getPosY()}));
+            return new Bullet(this.getPosX(), this.getPosY(), 2.5, 5.0, MathHelpers.normalizeVector(new double[] {player.getPosX() - this.getPosX(), player.getPosY() - this.getPosY()}), this, 1);
         }
         return null;
     }
 
     @Override
     public String getImagePath() {
-        // TODO Auto-generated method stub
         return IMAGE_PATH;
     }
 }

@@ -1,7 +1,14 @@
+package game.entities.instance.util;
+
+import game.entities.instance.Enemy;
 import game.entities.instance.Player;
 
-class WeaponSelector {
+public class WeaponSelector {
     int currentWeapon;
+
+    public WeaponSelector(int currentWeapon) {
+        this.currentWeapon = currentWeapon;
+    }
 
     void setCurrentWeapon(int currentWeapon) {
         this.currentWeapon = currentWeapon;
@@ -14,7 +21,7 @@ class WeaponSelector {
     void shoot(Player player, double[] directionVector) {
         switch(currentWeapon) {
             case 0:
-                break;
+                
             case 1:
                 break;
             default:
@@ -22,5 +29,7 @@ class WeaponSelector {
         }
     }
 
-    
+    void shoot(Enemy enemy, double[] directionVector) {
+        
+    }
 }

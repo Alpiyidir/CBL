@@ -1,13 +1,15 @@
 package game.entities.instance;
-import javax.imageio.ImageIO;
 
 import game.entities.general.CircularObjectWithUpdate;
+import game.entities.instance.util.WeaponSelector;
 
+import javax.imageio.ImageIO;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
 public class Player extends CircularObjectWithUpdate {
     int health;
+    int selectedWeapon;
     boolean isAlive;
     long lastVisible;
 
@@ -16,11 +18,16 @@ public class Player extends CircularObjectWithUpdate {
     public Player(double posX, double posY, double speed, double radius, int health) {
         super(posX, posY, speed, radius);
         this.health = health;
+        this.selectedWeapon = 0;
         this.isAlive = true;
     }
 
     public int getHealth() {
-        return health;
+        return this.health;
+    }
+
+    public int getSelectedWeapon() {
+        return this.selectedWeapon;
     }
 
     public boolean getIsAlive() {
@@ -29,6 +36,10 @@ public class Player extends CircularObjectWithUpdate {
 
     public void setHealth(int health) {
         this.health = health;
+    }
+
+    public void setSelectedWeapon(int selectedWeapon) {
+        this.selectedWeapon = selectedWeapon;
     }
 
     public void setIsAlive(boolean isAlive) {
