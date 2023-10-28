@@ -1,4 +1,6 @@
 package game.handlers;
+
+import game.GameScale;
 import java.awt.event.*;
 
 public class MouseHandler implements MouseListener, MouseMotionListener {
@@ -8,11 +10,11 @@ public class MouseHandler implements MouseListener, MouseMotionListener {
     boolean mousePressed;
 
     public int getX() {
-        return posX;
+        return (int) (posX / GameScale.getScaleX());
     }
 
     public int getY() {
-        return posY;
+        return (int) (posY / GameScale.getScaleY());
     }
 
     public boolean getMousePressed() {

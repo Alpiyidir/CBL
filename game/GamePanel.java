@@ -155,11 +155,8 @@ public class GamePanel extends JPanel implements Runnable {
 
         // Resize game
         Rectangle r = SwingUtilities.getWindowAncestor(this).getBounds();
-        scaleX = r.width / (double)horizontalSize;
-        scaleY = r.height / (double)verticalSize;
-
-        horizontalSize *= scaleX;
-        verticalSize *= scaleY;
+        scaleX = r.width / 1280.0;
+        scaleY = r.height / 720.0;
 
         CircularObject.setScaleX(scaleX);
         CircularObject.setScaleY(scaleY);

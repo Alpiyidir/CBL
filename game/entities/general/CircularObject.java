@@ -71,19 +71,19 @@ public abstract class CircularObject {
     public abstract String getImagePath();
 
     public void setPosX(double xPos) {
-        this.posX = xPos * getScaleX();
+        this.posX = xPos;
     }
 
     public void setPosY(double yPos) {
-        this.posY = yPos * getScaleY();
+        this.posY = yPos;
     }
 
     public void setRadius(double radius) {
-        this.radius = radius * Math.sqrt(Math.pow(getScaleX(), 2) + Math.pow(getScaleY(), 2));
+        this.radius = radius;
     }
 
     public void setSpeed(double speed) {
-        this.speed = speed * Math.sqrt(Math.pow(getScaleX(), 2) + Math.pow(getScaleY(), 2));
+        this.speed = speed;
     }
 
     private void setImage() {
@@ -172,11 +172,11 @@ public abstract class CircularObject {
         if (image != null) {
             
             g.drawImage(ImageHelpers.rotateImage(ImageHelpers.toBufferedImage(this.getImage().getScaledInstance((int)(image.getWidth() * getScaleX()), (int)(image.getHeight() * getScaleY()), Image.SCALE_DEFAULT)), this.getAngle()),
-                    (int) (this.getPosX() - image.getWidth() / 2),
-                    (int) (this.getPosY() - image.getHeight() / 2), null);
+                    (int) (((this.getPosX() - image.getWidth() / 2)) * getScaleX()),
+                    (int) ((this.getPosY() - image.getHeight() / 2) * getScaleY()), null);
         } else {
-            g.fillOval((int) (this.getPosX() - this.getRadius()), (int) (this.getPosY() - this.getRadius()),
-                    (int) this.getRadius() * 2, (int) this.getRadius() * 2);
+            g.fillOval((int) ((this.getPosX() - this.getRadius()) * getScaleX()), (int) ((this.getPosY() - this.getRadius()) * getScaleY()),
+                    (int) (this.getRadius() * 2 * Math.sqrt(Math.pow(getScaleX(), 2) + Math.pow(getScaleY(), 2))), (int) (this.getRadius() * 2 * Math.sqrt(Math.pow(getScaleX(), 2) + Math.pow(getScaleY(), 2))));
         }
 
     }
