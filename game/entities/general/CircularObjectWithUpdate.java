@@ -1,13 +1,13 @@
-abstract class CircularObjectWithUpdate extends CircularObject {
-
-
+package game.entities.general
+;
+public abstract class CircularObjectWithUpdate extends CircularObject {
     private double[] normalizedDirectionVector;
 
-    CircularObjectWithUpdate(double xPos, double yPos, double speed, double radius) {
+    protected CircularObjectWithUpdate(double xPos, double yPos, double speed, double radius) {
         super(xPos, yPos, speed, radius);
     }
 
-    CircularObjectWithUpdate(double xPos, double yPos, double speed, double radius, double[] normalizedDirectionVector) {
+    protected CircularObjectWithUpdate(double xPos, double yPos, double speed, double radius, double[] normalizedDirectionVector) {
         this(xPos, yPos, speed, radius);
         this.normalizedDirectionVector = normalizedDirectionVector;
     }

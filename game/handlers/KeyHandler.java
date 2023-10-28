@@ -1,4 +1,7 @@
+package game.handlers;
 import java.awt.event.*;
+
+import game.util.MathHelpers;
 
 public class KeyHandler implements KeyListener {
     

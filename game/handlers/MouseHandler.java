@@ -1,3 +1,4 @@
+package game.handlers;
 import java.awt.event.*;
 
 public class MouseHandler implements MouseListener, MouseMotionListener {

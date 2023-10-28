@@ -1,3 +1,4 @@
+package game.util;
 public class MathHelpers {
     public static double[] normalizeVector2D(double x, double y) {
         double magnitude = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));

@@ -1,16 +1,33 @@
+package game.entities.instance;
+
+import game.entities.general.CircularObject;
+import game.entities.general.CircularObjectWithUpdate;
+import game.util.MathHelpers;
+
 import java.awt.Color;
 import java.awt.Graphics;
 
 public class Bullet extends CircularObjectWithUpdate {
-
+    CircularObject owner;
     int type;
-    private boolean killsEnemy;
+    
+    static final String BLUE_IMAGE_PATH = "./game/entities/instance/sprites/BlueBullet.png";
+    static final String YELLOW_IMAGE_PATH = "./game/entities/instance/sprites/YellowBullet.png";
+    static final String RED_IMAGE_PATH = "./game/entities/instance/sprites/RedBullet.png";
 
-    public Bullet(double xPos, double yPos, double speed, double radius, int type, boolean killsEnemy,
+    public Bullet(double xPos, double yPos, double speed, double radius, int type, CircularObject owner,
             double[] normalizedDirectionVector) {
         super(xPos, yPos, speed, radius, normalizedDirectionVector);
         this.type = type;
-        this.killsEnemy = killsEnemy;
+        this.owner = owner;
+    }
+
+    public int getType() {
+        return this.type;
+    }
+
+    public CircularObject getOwner() {
+        return this.owner;
     }
 
     // Adds aim triangle to bullet
@@ -27,10 +44,7 @@ public class Bullet extends CircularObjectWithUpdate {
         super.setNormalizedDirectionVector(
                 MathHelpers.normalizeVector(MathHelpers.sumVectors(normalizedDirectionVector, normalVector)));
     }
-
-    boolean getKillsEnemy() {
-        return killsEnemy;
-    }
+   
 
     @Override
     public void draw(Graphics g) {
@@ -40,15 +54,20 @@ public class Bullet extends CircularObjectWithUpdate {
         } else {
             g.setColor(Color.orange);
         }
-        if (!this.getKillsEnemy()) {
-            g.setColor(Color.PINK);
-        }
         super.draw(g);
     }
 
     @Override
     public String getImagePath() {
-        // TODO Auto-generated method stub
-        return null;
+        int type = this.getType();
+        System.out.println(type);
+        switch (type) {
+            case 0:
+                return BLUE_IMAGE_PATH;
+            case 1:
+                return YELLOW_IMAGE_PATH;
+            default:
+                return null;
+        }
     }
 }

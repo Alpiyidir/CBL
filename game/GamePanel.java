@@ -1,3 +1,14 @@
+package game;
+
+import game.entities.instance.Bullet;
+import game.entities.instance.Enemy;
+import game.entities.instance.Explosion;
+import game.entities.instance.Planet;
+import game.entities.instance.Player;
+import game.handlers.KeyHandler;
+import game.handlers.MouseHandler;
+import game.util.MathHelpers;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.AffineTransform;
@@ -121,7 +132,7 @@ public class GamePanel extends JPanel implements Runnable {
                     JComponent comp = (JComponent) e.getSource();
                     Window win = SwingUtilities.getWindowAncestor(comp);
                     win.dispose();
-                    new MainFrame().startGame();
+                    new Main().startGame();
                 }
             });
             // this.setVisible(false);
@@ -145,29 +156,22 @@ public class GamePanel extends JPanel implements Runnable {
 
         // Check for player death
         if (player.getHealth() <= 0 && System.nanoTime() - 20 * 1e8 > player.getLastVisible()) {
-            player.setAlive(false);
+            player.setIsAlive(false);
             player.setLastVisible(System.nanoTime());
-            // player.setHealth(5);
         }
 
         // Check for player revival
-        // System.out.println(player.getLastVisible());
-        // System.out.println((long)(System.nanoTime() - 1e8)>player.getLastVisible());
-        if (!player.isAlive && System.nanoTime() - 10 * 1e8 > player.getLastVisible()) {
+        if (!player.getIsAlive() && System.nanoTime() - 10 * 1e8 > player.getLastVisible()) {
             player.setPos(horizontalSize / 2, verticalSize / 2);
-            player.setAlive(true);
+            player.setIsAlive(true);
             player.setHealth(5);
             playerHealthTextField.setText("Player health: " + player.getHealth());
-            // System.out.println(";last time|: " + player.getLastVisible());
-            // System.out.println("Player revived, time:" + System.nanoTime());
-            // System.out.println("diefferrence: " + (System.nanoTime() - 10*1e8));
-            // System.out.println();
         }
 
         // Change player position
         player.updatePos(drawIntervalMovementModifier);
         // Set player angle
-        player.setAngle(mouseHandler);
+        player.setAngle(mouseHandler.getX(), mouseHandler.getY());
 
         // Set current weapon type
         currentWeapon = keyHandler.getCurrentWeapon();
@@ -223,14 +227,13 @@ public class GamePanel extends JPanel implements Runnable {
             Enemy curEnemy = enemies.get(i);
 
             // Set enemy angle to face player
-            curEnemy.setAngle(player);
+            curEnemy.setAngle(player.getPosX(), player.getPosY());
 
-            
             double[] direction = new double[] { horizontalSize / 2.0 - curEnemy.getPosX(),
                     verticalSize / 2.0 - curEnemy.getPosY() };
             curEnemy.updatePos(MathHelpers.normalizeVector(direction), drawIntervalMovementModifier);
 
-            if (player.isAlive) {
+            if (player.getIsAlive()) {
                 Bullet enemyBullet = curEnemy.shootBullet(player);
                 if (enemyBullet != null) {
                     System.out.println("added enemy bullet");
@@ -241,9 +244,9 @@ public class GamePanel extends JPanel implements Runnable {
         }
 
         // Collision between bullets and player
-        if (player.isAlive && System.nanoTime() - 35 * 1e8 > player.lastVisible) {
+        if (player.getIsAlive() && System.nanoTime() - 35 * 1e8 > player.getLastVisible()) {
             for (int i = 0; i < bullets.size(); i++) {
-                if (bullets.get(i).intersects(player) && !bullets.get(i).getKillsEnemy()) {
+                if (bullets.get(i).intersects(player) && bullets.get(i).getOwner() != player) {
                     player.setHealth(player.getHealth() - 1);
                     playerHealthTextField.setText("Player health: " + player.getHealth());
                     // Delete the bullet
@@ -258,9 +261,9 @@ public class GamePanel extends JPanel implements Runnable {
             boolean enemyHit = false;
             boolean rocketRemoved = false;
             for (int j = 0; j < bullets.size(); j++) {
-                if (enemies.get(i).intersects(bullets.get(j)) && bullets.get(j).getKillsEnemy()) {
+                if (enemies.get(i).intersects(bullets.get(j)) && bullets.get(j).getOwner() != enemies.get(i)) {
                     Bullet currBullet = bullets.get(j);
-                    switch (currBullet.type) {
+                    switch (currBullet.getType()) {
                         case 0: // Normal bullet - just kill the enemy
                             enemies.remove(i);
                             enemyHit = true;
@@ -325,15 +328,14 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void processInputsThatCreateObjects() {
-        if (mouseHandler.getMousePressed() && player.isAlive) {
-
+        if (mouseHandler.getMousePressed() && player.getIsAlive()) {
             switch (currentWeapon) {
                 case 0: // Assault Rifle
                     if (System.nanoTime() - 1e8 > lastBulletTime) {
                         // System.out.println("Bullet shot");
 
                         // Initialize bullet
-                        Bullet bullet = new Bullet(player.getPosX(), player.getPosY(), 7, 5, 0, true,
+                        Bullet bullet = new Bullet(player.getPosX(), player.getPosY(), 7, 5, 0, player,
                                 MathHelpers.normalizeVector(new double[] { mouseHandler.getX()
                                         - player.getPosX(), mouseHandler.getY() - player.getPosY() }));
 
@@ -348,6 +350,9 @@ public class GamePanel extends JPanel implements Runnable {
                         // Set new speed accounting for velocity of player
                         bullet.setSpeed(Math.sqrt(Math.pow(
                                 combinedDirectionVector[0], 2) + Math.pow(combinedDirectionVector[1], 2)));
+
+                        // Set bullet angle
+                        bullet.setAngle(mouseHandler.getX(), mouseHandler.getY());
 
                         // Add current bullet to bullets arraylist
                         bullets.add(bullet);
@@ -365,7 +370,7 @@ public class GamePanel extends JPanel implements Runnable {
                         // System.out.println("Rocket shot");
 
                         // Initialize bullet
-                        Bullet bullet = new Bullet(player.getPosX(), player.getPosY(), 4, 5, 1, true,
+                        Bullet bullet = new Bullet(player.getPosX(), player.getPosY(), 4, 5, 1, player,
                                 MathHelpers.normalizeVector(new double[] { mouseHandler.getX()
                                         - player.getPosX(), mouseHandler.getY() - player.getPosY() }));
 
@@ -381,6 +386,9 @@ public class GamePanel extends JPanel implements Runnable {
                         bullet.setSpeed(Math.sqrt(Math.pow(
                                 combinedDirectionVector[0], 2) + Math.pow(combinedDirectionVector[1], 2)));
 
+                        // Set bullet angle
+                        bullet.setAngle(mouseHandler.getX(), mouseHandler.getY());
+
                         // Add current bullet to bullets arraylist
                         bullets.add(bullet);
 
@@ -391,6 +399,8 @@ public class GamePanel extends JPanel implements Runnable {
                          */
                         lastBulletTime = System.nanoTime();
                     }
+                    break;
+                default:
                     break;
             }
         }
@@ -426,7 +436,7 @@ public class GamePanel extends JPanel implements Runnable {
         }
 
         // Paint player
-        if (player.isAlive) {
+        if (player.getIsAlive()) {
             g.setColor(Color.ORANGE);
             player.draw(g);
         }

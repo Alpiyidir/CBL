@@ -1,11 +1,15 @@
+package game;
+
 import java.awt.*;
 import java.awt.RenderingHints.Key;
 import java.awt.event.ActionEvent;
 import javax.swing.*;
 
-class MainFrame {
+import game.handlers.KeyHandler;
+
+class Main {
     void startGame() {
-        JFrame frame = new JFrame ("Game Window");
+        JFrame frame = new JFrame("Game Window");
         GamePanel gamePanel = new GamePanel();
 
         frame.addKeyListener(new KeyHandler());
@@ -18,6 +22,6 @@ class MainFrame {
     }
 
     public static void main(String[] args) {
-        new MainFrame().startGame();
+        new Main().startGame();
     }
 }

@@ -1,3 +1,8 @@
+package game.entities.general;
+
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
@@ -5,7 +10,9 @@ import java.io.File;
 
 import javax.imageio.ImageIO;
 
-abstract class CircularObject {
+import game.util.ImageHelpers;
+
+public abstract class CircularObject {
     private double posX;
     private double posY;
     private double speed;
@@ -13,14 +20,14 @@ abstract class CircularObject {
 
     private double angle;
     private BufferedImage image;
-    private String IMAGE_PATH;
+    private String imagePath;
 
-    CircularObject(double posX, double posY, double speed, double radius) {
+    protected CircularObject(double posX, double posY, double speed, double radius) {
         this.posX = posX;
         this.posY = posY;
         this.speed = speed;
         this.radius = radius;
-        this.IMAGE_PATH = this.getImagePath();
+        this.imagePath = this.getImagePath();
         this.setImage();
     }
 
@@ -50,9 +57,10 @@ abstract class CircularObject {
         return this.angle;
     }
 
+    public abstract String getImagePath();
+
     public void setPosX(double xPos) {
         this.posX = xPos;
-
     }
 
     public void setPosY(double yPos) {
@@ -69,20 +77,40 @@ abstract class CircularObject {
 
     private void setImage() {
         try {
-            if (this.IMAGE_PATH == null) {
+            if (this.imagePath == null) {
                 throw new Exception();
             }
             this.image = ImageHelpers.toBufferedImage(
-                    ImageIO.read(new File(IMAGE_PATH)).getScaledInstance(
+                    ImageIO.read(new File(this.getImagePath())).getScaledInstance(
                             (int) this.getRadius() * 2, (int) this.getRadius() * 2, Image.SCALE_DEFAULT));
+
         } catch (Exception e) {
             this.image = null;
         }
-       
+
     }
 
     public void setAngle(double angle) {
         this.angle = angle;
+    }
+
+    public void setAngle(double posX, double posY) {
+        if ((posX - this.getPosX()) < 0) {
+            this.setAngle(-Math
+                    .atan((posY - this.getPosY())
+                            / -(double) (posX - this.getPosX()))
+                    - (Math.PI / 2.0));
+
+        } else {
+            this.setAngle(Math
+                    .atan((posY - this.getPosY())
+                            / (double) (posX - this.getPosX()))
+                    + (Math.PI / 2.0));
+        }
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
     }
 
     // Additional helper methods
@@ -124,13 +152,13 @@ abstract class CircularObject {
         BufferedImage image = this.getImage();
         if (image != null) {
             g.drawImage(ImageHelpers.rotateImage(this.getImage(), this.getAngle()),
-                (int) (this.getPosX() - image.getWidth() / 2),
-                (int) (this.getPosY() - image.getHeight() / 2), null);
+                    (int) (this.getPosX() - image.getWidth() / 2),
+                    (int) (this.getPosY() - image.getHeight() / 2), null);
         } else {
-            g.fillOval((int) (this.getPosX() - this.getRadius()), (int) (this.getPosY() - this.getRadius()), (int) this.getRadius() * 2, (int) this.getRadius() * 2);
+            g.fillOval((int) (this.getPosX() - this.getRadius()), (int) (this.getPosY() - this.getRadius()),
+                    (int) this.getRadius() * 2, (int) this.getRadius() * 2);
         }
-        
+
     }
 
-    public abstract String getImagePath();
 }
