@@ -26,8 +26,8 @@ import javax.swing.*;
 
 public class GamePanel extends JPanel implements Runnable {
     final int framesPerSecond = 240;
-    int horizontalSize = 1280;
-    int verticalSize = 720;
+    int horizontalSize = 1920;
+    int verticalSize = 1080;
 
     double scaleX = 1;
     double scaleY = 1;

@@ -11,9 +11,9 @@ public class Bullet extends CircularObjectWithUpdate {
     CircularObject owner;
     int type;
     
-    static final String BLUE_IMAGE_PATH = "./game/entities/instance/sprites/BlueBullet.png";
-    static final String YELLOW_IMAGE_PATH = "./game/entities/instance/sprites/YellowBullet.png";
-    static final String RED_IMAGE_PATH = "./game/entities/instance/sprites/RedBullet.png";
+    static final String BLUE_IMAGE_PATH = ".\\game\\entities\\instance\\sprites\\BlueBullet.png";
+    static final String YELLOW_IMAGE_PATH = ".\\game\\entities\\instance\\sprites\\YellowBullet.png";
+    static final String RED_IMAGE_PATH = ".\\game\\entities\\instance\\sprites\\RedBullet.png";
 
     public Bullet(double xPos, double yPos, double speed, double radius, int type, CircularObject owner,
             double[] normalizedDirectionVector) {
