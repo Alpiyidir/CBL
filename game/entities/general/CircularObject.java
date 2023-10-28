@@ -1,5 +1,7 @@
 package game.entities.general;
 
+import game.GameScale;
+
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -9,7 +11,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 
 import javax.imageio.ImageIO;
-
 import game.util.ImageHelpers;
 
 public abstract class CircularObject {
@@ -21,6 +22,8 @@ public abstract class CircularObject {
     private double angle;
     private BufferedImage image;
     private String imagePath;
+
+    private static GameScale scale;
 
     protected CircularObject(double posX, double posY, double speed, double radius) {
         this.posX = posX;
@@ -57,22 +60,30 @@ public abstract class CircularObject {
         return this.angle;
     }
 
-    public abstract String getImagePath();
-
-    public void setPosX(double xPos, double scale) {
-        this.posX = xPos*scale;
+    public static double getScaleX() {
+        return GameScale.getScaleX();
     }
 
-    public void setPosY(double yPos, double scale) {
-        this.posY = yPos*scale;
+    public static double getScaleY() {
+        return GameScale.getScaleY();
+    }
+
+    public abstract String getImagePath();
+
+    public void setPosX(double xPos) {
+        this.posX = xPos * getScaleX();
+    }
+
+    public void setPosY(double yPos) {
+        this.posY = yPos * getScaleY();
     }
 
     public void setRadius(double radius) {
-        this.radius = radius;
+        this.radius = radius * Math.sqrt(Math.pow(getScaleX(), 2) + Math.pow(getScaleY(), 2));
     }
 
     public void setSpeed(double speed) {
-        this.speed = speed;
+        this.speed = speed * Math.sqrt(Math.pow(getScaleX(), 2) + Math.pow(getScaleY(), 2));
     }
 
     private void setImage() {
@@ -113,28 +124,36 @@ public abstract class CircularObject {
         this.imagePath = imagePath;
     }
 
+    public static void setScaleX(double scaleX) {
+        GameScale.setScaleX(scaleX);
+    }
+
+    public static void setScaleY(double scaleY) {
+        GameScale.setScaleY(scaleY);
+    }
+
     // Additional helper methods
-    public void setPos(double posX, double posY, double xScale, double yScale) {
-        this.setPosX(posX, xScale);
-        this.setPosY(posY, yScale);
+    public void setPos(double posX, double posY) {
+        this.setPosX(posX);
+        this.setPosY(posY);
     }
 
-    public void addPosX(double changeX, double scale) {
-        this.setPosX(this.getPosX() + changeX, scale);
+    public void addPosX(double changeX) {
+        this.setPosX(this.getPosX() + changeX);
     }
 
-    public void addPosY(double changeY, double scale) {
-        this.setPosY(this.getPosY() + changeY, scale);
+    public void addPosY(double changeY) {
+        this.setPosY(this.getPosY() + changeY);
     }
 
-    public void addPos(double changeX, double changeY, double xScale, double yScale) {
-        this.addPosX(changeX, xScale);
-        this.addPosY(changeY, yScale);
+    public void addPos(double changeX, double changeY) {
+        this.addPosX(changeX);
+        this.addPosY(changeY);
     }
 
-    public void addPos(double[] changeVector, double xScale, double yScale) {
-        this.addPosX(changeVector[0], xScale);
-        this.addPosY(changeVector[1], yScale);
+    public void addPos(double[] changeVector) {
+        this.addPosX(changeVector[0]);
+        this.addPosY(changeVector[1]);
     }
 
     public boolean intersects(CircularObject circularObject) {
@@ -151,7 +170,8 @@ public abstract class CircularObject {
     public void draw(Graphics g) {
         BufferedImage image = this.getImage();
         if (image != null) {
-            g.drawImage(ImageHelpers.rotateImage(this.getImage(), this.getAngle()),
+            
+            g.drawImage(ImageHelpers.rotateImage(ImageHelpers.toBufferedImage(this.getImage().getScaledInstance((int)(image.getWidth() * getScaleX()), (int)(image.getHeight() * getScaleY()), Image.SCALE_DEFAULT)), this.getAngle()),
                     (int) (this.getPosX() - image.getWidth() / 2),
                     (int) (this.getPosY() - image.getHeight() / 2), null);
         } else {

@@ -21,10 +21,10 @@ public class Enemy extends CircularObject {
         }
     }
 
-    public void updatePos(double[] normalizedDirectionVector, double drawIntervalMovementModifier, double xScale, double yScale) {
+    public void updatePos(double[] normalizedDirectionVector, double drawIntervalMovementModifier) {
         // System.out.println("0: " + normalizedDirectionVector[0] + " 1: " + normalizedDirectionVector[1]);
-        this.addPosX(normalizedDirectionVector[0] * drawIntervalMovementModifier, xScale);
-        this.addPosY(normalizedDirectionVector[1] * drawIntervalMovementModifier, yScale);
+        this.addPosX(normalizedDirectionVector[0] * drawIntervalMovementModifier);
+        this.addPosY(normalizedDirectionVector[1] * drawIntervalMovementModifier);
     }
 
     public Bullet shootBullet(Player player){

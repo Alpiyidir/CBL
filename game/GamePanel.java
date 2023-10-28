@@ -1,5 +1,6 @@
 package game;
 
+import game.entities.general.CircularObject;
 import game.entities.instance.Bullet;
 import game.entities.instance.Enemy;
 import game.entities.instance.Explosion;
@@ -28,8 +29,8 @@ public class GamePanel extends JPanel implements Runnable {
     int horizontalSize = 1280;
     int verticalSize = 720;
 
-    double xScale = 1;
-    double yScale = 1;
+    double scaleX = 1;
+    double scaleY = 1;
 
     JButton gameOverButton;
 
@@ -154,15 +155,19 @@ public class GamePanel extends JPanel implements Runnable {
 
         // Resize game
         Rectangle r = SwingUtilities.getWindowAncestor(this).getBounds();
-        xScale = r.width / (double) horizontalSize;
-        yScale = r.height / (double) verticalSize;
+        scaleX = r.width / (double)horizontalSize;
+        scaleY = r.height / (double)verticalSize;
 
-        horizontalSize *= xScale;
-        verticalSize *= yScale;
+        horizontalSize *= scaleX;
+        verticalSize *= scaleY;
 
-        planet.setPos(planet.getPosX(), planet.getPosY(), xScale, yScale);
+        CircularObject.setScaleX(scaleX);
+        CircularObject.setScaleY(scaleY);
 
-        System.out.println("X scale: " + xScale + " Y scale: " + yScale);
+
+        planet.setPos(planet.getPosX(), planet.getPosY());
+
+        System.out.println("X scale: " + scaleX + " Y scale: " + scaleY);
 
         // Terminate game if health is smaller than or equal to zero
         if (planet.getHealth() <= 0) {
@@ -177,7 +182,7 @@ public class GamePanel extends JPanel implements Runnable {
 
         // Check for player revival
         if (!player.getIsAlive() && System.nanoTime() - 10 * 1e8 > player.getLastVisible()) {
-            player.setPos(horizontalSize / 2, verticalSize / 2, xScale, yScale);
+            player.setPos(horizontalSize / 2, verticalSize / 2);
             player.setIsAlive(true);
             player.setHealth(5);
             playerHealthTextField.setText("Player health: " + player.getHealth());
@@ -186,12 +191,12 @@ public class GamePanel extends JPanel implements Runnable {
         // Change player position
         double originalPosX = player.getPosX();
         double originalPosY = player.getPosY();
-        player.updatePos(drawIntervalMovementModifier, xScale, yScale);
+        player.updatePos(drawIntervalMovementModifier);
         if (player.getPosX() >= horizontalSize - player.getRadius() || player.getPosX() < 0 + player.getRadius()) {
-            player.setPosX(originalPosX, xScale);
+            player.setPosX(originalPosX);
         }
         if (player.getPosY() >= verticalSize - player.getRadius() || player.getPosY() < 0 + player.getRadius()) {
-            player.setPosY(originalPosY, yScale);
+            player.setPosY(originalPosY);
         }
         // Set player angle
         player.setAngle(mouseHandler.getX(), mouseHandler.getY());
@@ -209,7 +214,7 @@ public class GamePanel extends JPanel implements Runnable {
                 bullets.remove(i);
             }
 
-            bullet.updatePos(drawIntervalMovementModifier, xScale, yScale);
+            bullet.updatePos(drawIntervalMovementModifier);
         }
 
         // adding new enemies
@@ -254,7 +259,7 @@ public class GamePanel extends JPanel implements Runnable {
 
             double[] direction = new double[] { horizontalSize / 2.0 - curEnemy.getPosX(),
                     verticalSize / 2.0 - curEnemy.getPosY() };
-            curEnemy.updatePos(MathHelpers.normalizeVector(direction), drawIntervalMovementModifier, xScale, yScale);
+            curEnemy.updatePos(MathHelpers.normalizeVector(direction), drawIntervalMovementModifier);
 
             if (player.getIsAlive()) {
                 Bullet enemyBullet = curEnemy.shootBullet(player);

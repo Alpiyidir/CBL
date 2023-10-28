@@ -1,5 +1,5 @@
-package game.entities.general
-;
+package game.entities.general;
+
 public abstract class CircularObjectWithUpdate extends CircularObject {
     private double[] normalizedDirectionVector;
 
@@ -25,16 +25,16 @@ public abstract class CircularObjectWithUpdate extends CircularObject {
         return new double[]{normalizedDirectionVector[0] * this.getSpeed(), normalizedDirectionVector[1] * this.getSpeed()};
     }
 
-    public void updatePosX(double timeStep, double scale) {
-        this.addPosX(this.normalizedDirectionVector[0] * this.getSpeed() * timeStep, scale);
+    public void updatePosX(double timeStep) {
+        this.addPosX(this.normalizedDirectionVector[0] * this.getSpeed() * timeStep);
     }
 
-    public void updatePosY(double timeStep, double scale) {
-        this.addPosY(this.normalizedDirectionVector[1] * this.getSpeed() * timeStep, scale);
+    public void updatePosY(double timeStep) {
+        this.addPosY(this.normalizedDirectionVector[1] * this.getSpeed() * timeStep);
     }
 
-    public void updatePos(double timeStep, double xScale, double yScale) {
-        this.updatePosX(timeStep, xScale);
-        this.updatePosY(timeStep, yScale);
+    public void updatePos(double timeStep) {
+        this.updatePosX(timeStep);
+        this.updatePosY(timeStep);
     }
 }
