@@ -169,7 +169,15 @@ public class GamePanel extends JPanel implements Runnable {
         }
 
         // Change player position
+        double originalPosX = player.getPosX();
+        double originalPosY = player.getPosY();
         player.updatePos(drawIntervalMovementModifier);
+        if (player.getPosX() >= horizontalSize - player.getRadius() || player.getPosX() < 0 + player.getRadius()) {
+            player.setPosX(originalPosX);
+        }
+        if (player.getPosY() >= verticalSize - player.getRadius() || player.getPosY() < 0 + player.getRadius()) {
+            player.setPosY(originalPosY);
+        }
         // Set player angle
         player.setAngle(mouseHandler.getX(), mouseHandler.getY());
 
