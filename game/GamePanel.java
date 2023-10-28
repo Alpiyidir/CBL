@@ -28,6 +28,9 @@ public class GamePanel extends JPanel implements Runnable {
     int horizontalSize = 1280;
     int verticalSize = 720;
 
+    double xScale = 1;
+    double yScale = 1;
+
     JButton gameOverButton;
 
     Player player;
@@ -148,6 +151,13 @@ public class GamePanel extends JPanel implements Runnable {
          * to ensure that movement speed is consistent across all framerates.
          */
         final double drawIntervalMovementModifier = drawInterval / Math.pow(10, 7);
+
+        // Resize game
+        Rectangle r = SwingUtilities.getWindowAncestor(this).getBounds();
+        xScale = r.width / (double) horizontalSize;
+        yScale = r.height / (double) verticalSize;
+
+        System.out.println("X scale: " + xScale + " Y scale: " + yScale);
 
         // Terminate game if health is smaller than or equal to zero
         if (planet.getHealth() <= 0) {
