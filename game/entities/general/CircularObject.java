@@ -59,12 +59,12 @@ public abstract class CircularObject {
 
     public abstract String getImagePath();
 
-    public void setPosX(double xPos) {
-        this.posX = xPos;
+    public void setPosX(double xPos, double scale) {
+        this.posX = xPos*scale;
     }
 
-    public void setPosY(double yPos) {
-        this.posY = yPos;
+    public void setPosY(double yPos, double scale) {
+        this.posY = yPos*scale;
     }
 
     public void setRadius(double radius) {
@@ -114,27 +114,27 @@ public abstract class CircularObject {
     }
 
     // Additional helper methods
-    public void setPos(double posX, double posY) {
-        this.setPosX(posX);
-        this.setPosY(posY);
+    public void setPos(double posX, double posY, double xScale, double yScale) {
+        this.setPosX(posX, xScale);
+        this.setPosY(posY, yScale);
     }
 
-    public void addPosX(double changeX) {
-        this.setPosX(this.getPosX() + changeX);
+    public void addPosX(double changeX, double scale) {
+        this.setPosX(this.getPosX() + changeX, scale);
     }
 
-    public void addPosY(double changeY) {
-        this.setPosY(this.getPosY() + changeY);
+    public void addPosY(double changeY, double scale) {
+        this.setPosY(this.getPosY() + changeY, scale);
     }
 
-    public void addPos(double changeX, double changeY) {
-        this.addPosX(changeX);
-        this.addPosY(changeY);
+    public void addPos(double changeX, double changeY, double xScale, double yScale) {
+        this.addPosX(changeX, xScale);
+        this.addPosY(changeY, yScale);
     }
 
-    public void addPos(double[] changeVector) {
-        this.addPosX(changeVector[0]);
-        this.addPosY(changeVector[1]);
+    public void addPos(double[] changeVector, double xScale, double yScale) {
+        this.addPosX(changeVector[0], xScale);
+        this.addPosY(changeVector[1], yScale);
     }
 
     public boolean intersects(CircularObject circularObject) {
