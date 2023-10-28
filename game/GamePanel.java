@@ -26,8 +26,8 @@ import javax.swing.*;
 
 public class GamePanel extends JPanel implements Runnable {
     final int framesPerSecond = 240;
-    int horizontalSize = 1920;
-    int verticalSize = 1080;
+    int horizontalSize = 1280;
+    int verticalSize = 720;
 
     double scaleX = 1;
     double scaleY = 1;
@@ -155,8 +155,8 @@ public class GamePanel extends JPanel implements Runnable {
 
         // Resize game
         Rectangle r = SwingUtilities.getWindowAncestor(this).getBounds();
-        scaleX = r.width / 1280.0;
-        scaleY = r.height / 720.0;
+        scaleX = r.width / (double) horizontalSize;
+        scaleY = r.height / (double) verticalSize;
 
         CircularObject.setScaleX(scaleX);
         CircularObject.setScaleY(scaleY);
