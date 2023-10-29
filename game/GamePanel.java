@@ -192,7 +192,7 @@ public class GamePanel extends JPanel implements Runnable {
         }
 
         // adding new enemies
-        if (Math.floor(ThreadLocalRandom.current().nextInt(0, 100)) == 0 && enemies.size() < 15) {
+        if (Math.floor(ThreadLocalRandom.current().nextInt(0, 100)) <= 4 * framesPerSecond / 240.0 && enemies.size() < 15) {
 
             // System.out.println("enemy spawned");
             // add enemies randomly to one of the sides of the screen
