@@ -2,6 +2,10 @@ package game.entities.instance;
 
 import game.entities.general.CircularObject;
 
+/**
+ * Class Explosion
+ * Contains all methods and variables that is required for a bullet instance.
+ */
 public class Explosion extends CircularObject {
     private long timeCreated;
     private double finalRadius;
@@ -14,14 +18,18 @@ public class Explosion extends CircularObject {
         this.timeCreated = System.nanoTime();
     }
 
+    /**
+     * Updates the radius of the explosion dependant on the time elapsed since creation.
+     */
     public void updateRadius() {
-        double timeElapsedSinceCreationInSeconds = this.getTimeElapsedSinceCreation() / Math.pow(10, 9);
+        double timeElapsedSinceCreationInSeconds = this.getTimeElapsedSinceCreation() 
+            / Math.pow(10, 9);
         System.out.println(timeElapsedSinceCreationInSeconds);
 
         // Increasing exponential decay to simulate radius expansion rate of an
         // explosion
-        double radius = finalRadius
-                * (1 - Math.exp(-1.8 * Math.pow(timeElapsedSinceCreationInSeconds / explosionDurationInSeconds, 0.4)));
+        double radius = finalRadius * (1 - Math.exp(-1.8 
+            * Math.pow(timeElapsedSinceCreationInSeconds / explosionDurationInSeconds, 0.4)));
         System.out.println(radius);
         this.setRadius(radius);
     }
@@ -30,8 +38,14 @@ public class Explosion extends CircularObject {
         return finalRadius;
     }
 
+    /**
+     * Determines whether the time elapsed since the explosion
+     * was created has surpassed the explosion's lifetime.
+     * @return Whether the explosion should no longer be drawn.
+     */
     public boolean shouldBeDeleted() {
-        return System.nanoTime() - explosionDurationInSeconds * Math.pow(10, 9) > this.getTimeCreated();
+        return System.nanoTime() - explosionDurationInSeconds
+            * Math.pow(10, 9) > this.getTimeCreated();
     }
 
     public long getTimeCreated() {

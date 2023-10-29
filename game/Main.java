@@ -1,11 +1,6 @@
 package game;
 
-import java.awt.*;
-import java.awt.RenderingHints.Key;
-import java.awt.event.ActionEvent;
 import javax.swing.*;
-
-import game.handlers.KeyHandler;
 
 class Main {
     void startGame() {

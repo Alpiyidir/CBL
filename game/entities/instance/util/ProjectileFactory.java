@@ -6,11 +6,19 @@ import game.entities.instance.Player;
 import game.handlers.MouseHandler;
 import game.util.MathHelpers;
 
+/**
+ * Factory for creating all derived types from Projectile.
+ */
 public class ProjectileFactory {
+    /**
+     * Create a bullet that originates from a player that goes to a mouse pos.
+     */
     public static Bullet createBullet(Player player, MouseHandler mouseHandler) {
-        if (System.nanoTime() - 1e8 <= player.getLastBulletTime() && player.getSelectedWeapon() == 0) {
+        if (System.nanoTime() - 1e8 <= player.getLastBulletTime() 
+                && player.getSelectedWeapon() == 0) {
             return null;
-        } else if (System.nanoTime() - 5 * 1e8 <= player.getLastBulletTime() && player.getSelectedWeapon() == 1) {
+        } else if (System.nanoTime() - 5 * 1e8 <= player.getLastBulletTime() 
+                && player.getSelectedWeapon() == 1) {
             return null;
         }
 
@@ -32,9 +40,9 @@ public class ProjectileFactory {
 
         // Initialize bullet
         Bullet bullet = new Bullet(player.getPosX(), player.getPosY(), speed, 5,
-                MathHelpers.normalizeVector(new double[] { mouseHandler.getX()
-                        - player.getPosX(), mouseHandler.getY() - player.getPosY() }),
-                player, player.getSelectedWeapon(), player.getSelectedWeapon());
+                MathHelpers.normalizeVector(new double[] {mouseHandler.getX() - player.getPosX(),
+                    mouseHandler.getY() - player.getPosY()}), player, 
+                    player.getSelectedWeapon(), player.getSelectedWeapon());
 
         double[] bulletDirectionVector = bullet.getDirectionVector();
 
@@ -52,7 +60,11 @@ public class ProjectileFactory {
 
         return bullet;
     }
-
+    
+    /** 
+     * Creates a bullet that originates from an enemy that should travel 
+     * to the current position of the player.
+     */
     public static Bullet createBullet(Enemy enemy, Player player) {
         if (System.nanoTime() - 9 * 1e8 <= enemy.getLastBulletTime() || !enemy.getIsShooter()) {
             return null;
@@ -60,7 +72,8 @@ public class ProjectileFactory {
         enemy.setLastBulletTime(System.nanoTime());
         Bullet bullet = new Bullet(enemy.getPosX(), enemy.getPosY(), 2.5, 5.0,
                 MathHelpers.normalizeVector(
-                        new double[] { player.getPosX() - enemy.getPosX(), player.getPosY() - enemy.getPosY() }),
+                        new double[]{player.getPosX() - enemy.getPosX(), 
+                            player.getPosY() - enemy.getPosY()}),
                 enemy, 2, 0);
         bullet.rotateTowards(player.getPosX(), player.getPosY());
         return bullet;

@@ -3,11 +3,16 @@ package game.entities.instance;
 import game.entities.general.CircularObject;
 import game.entities.general.Projectile;
 
+/**
+ * Class Bullet
+ * Contains all methods and variables that is required for a bullet instance.
+ */
 public class Bullet extends Projectile {
     private int type;
 
-    public Bullet(double xPos, double yPos, double speed, double radius, double[] normalizedDirectionVector,
-            CircularObject owner, int spriteNumber, int type) {
+    public Bullet(double xPos, double yPos, double speed, double radius, 
+        double[] normalizedDirectionVector,
+        CircularObject owner, int spriteNumber, int type) {
         super(xPos, yPos, speed, radius, normalizedDirectionVector, owner, spriteNumber);
         this.type = type;
     }

@@ -1,11 +1,17 @@
 package game.handlers;
-import java.awt.event.*;
 
 import game.util.MathHelpers;
+import java.awt.event.*;
 
+/**
+ * Class KeyHandler
+ * Handles keyboard input.
+ */
 public class KeyHandler implements KeyListener {
-    
-    private boolean rightPressed, leftPressed, upPressed, downPressed, spacePressed;
+    private boolean rightPressed;
+    private boolean leftPressed;
+    private boolean upPressed;
+    private boolean downPressed;
     private int weaponType;
 
     @Override
@@ -29,9 +35,6 @@ public class KeyHandler implements KeyListener {
         if (code == KeyEvent.VK_D) {
             rightPressed = true;
         }
-        if (code == KeyEvent.VK_SPACE) {
-            spacePressed = true;
-        }
         if (code == KeyEvent.VK_1) {
             weaponType = 0;
         }
@@ -50,25 +53,27 @@ public class KeyHandler implements KeyListener {
         if (code == KeyEvent.VK_A) {
             leftPressed = false;
         }
-        if (code == KeyEvent.VK_S ){
+        if (code == KeyEvent.VK_S) {
             downPressed = false;
         }
         if (code == KeyEvent.VK_D) {
             rightPressed = false;
         }
-        if (code == KeyEvent.VK_SPACE) {
-            spacePressed = false;
-        }
     }
 
     public boolean[] getKeysPressed() {
-        return new boolean[]{upPressed, downPressed, leftPressed, rightPressed};
+        return new boolean[] { upPressed, downPressed, leftPressed, rightPressed };
     }
 
-    public int getCurrentWeapon(){
+    public int getCurrentWeapon() {
         return weaponType;
     }
 
+    /**
+     * Computes the direction vector of movement given the
+     * current combination of pressed keys.
+     * @return normalized direction vector to move in
+     */
     public double[] getNormalizedDirectionVectorFromKeys() {
         double[] directionVector = new double[2];
         if (!(upPressed && downPressed)) {
@@ -89,20 +94,4 @@ public class KeyHandler implements KeyListener {
 
         return MathHelpers.normalizeVector(directionVector);
     }
-
-    /*protected class KeysPressed {
-        boolean upPressed;
-        boolean downPressed;
-        boolean leftPressed;
-        boolean rightPressed;
-
-        KeysPressed(boolean upPressed, boolean downPressed, boolean leftPressed, boolean rightPressed) {
-            this.upPressed = upPressed;
-            this.downPressed = downPressed;
-            this.leftPressed = leftPressed;
-            this.rightPressed = rightPressed;
-        }
-    }*/
 }
-
-

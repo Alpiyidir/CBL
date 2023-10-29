@@ -1,9 +1,12 @@
 package game.handlers;
 
+import game.entities.general.util.GameScale;
 import java.awt.event.*;
 
-import game.entities.general.util.GameScale;
-
+/**
+ * Class MouseHandler
+ * Handles mouse input.
+ */
 public class MouseHandler implements MouseListener, MouseMotionListener {
     int posX;
     int posY;
@@ -22,6 +25,10 @@ public class MouseHandler implements MouseListener, MouseMotionListener {
         return mousePressed;
     }
 
+    /**
+     * Sets mousePressed to true when LMB is pressed.
+     * @param e MouseEvent
+     */
     public void mousePressed(MouseEvent e) {
         if (e.getButton() == 1) {
             System.out.println("Mouse Button Left Pressed");
@@ -30,6 +37,10 @@ public class MouseHandler implements MouseListener, MouseMotionListener {
         
     }
 
+    /**
+     * Sets mousePressed to false when LMB is released.
+     * @param e MouseEvent
+     */
     public void mouseReleased(MouseEvent e) {
         if (e.getButton() == 1) {
             System.out.println("Mouse Button Left Released");

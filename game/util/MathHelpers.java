@@ -1,5 +1,17 @@
 package game.util;
+
+/**
+ * class MathHelpers
+ * Static helpers for some math.
+ */
 public class MathHelpers {
+    
+    /**
+     * Normalized a direction vector given its seperate components.
+     * @param x x component
+     * @param y y component
+     * @return normalized direction vector
+     */
     public static double[] normalizeVector2D(double x, double y) {
         double magnitude = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
         if (magnitude == 0) {
@@ -8,6 +20,11 @@ public class MathHelpers {
         return new double[]{x / magnitude, y / magnitude};
     }
 
+    /**
+     * Normalizes a direction vector.
+     * @param directionVector direction vector
+     * @return normalized direction vector
+     */
     public static double[] normalizeVector(double[] directionVector) {
         double[] normalizedDirectionVector = new double[directionVector.length];
 

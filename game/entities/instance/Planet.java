@@ -2,6 +2,10 @@ package game.entities.instance;
 
 import game.entities.general.CircularObject;
 
+/**
+ * Class Planet
+ * Contains all methods and variables that is required for a planet instance.
+ */
 public class Planet extends CircularObject {
     double health;
 

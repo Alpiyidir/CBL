@@ -8,6 +8,11 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import javax.imageio.ImageIO;
 
+/**
+ * Class CircularObject
+ * Contains all methods and variables that is required for any instance of
+ * a circular object within the game.
+ */
 public abstract class CircularObject {
     private double posX;
     private double posY;
@@ -79,6 +84,9 @@ public abstract class CircularObject {
         this.speed = speed;
     }
 
+    /**
+     * Setter for image, uses the filepath to create a bufferedimage with instance state.
+     */
     public void setImage() {
         try {
             if (this.imagePath == null) {
@@ -86,7 +94,9 @@ public abstract class CircularObject {
             }
             this.image = ImageHelpers.toBufferedImage(
                     ImageIO.read(new File(this.getImagePath())).getScaledInstance(
-                            (int) this.getRadius() * 2, (int) this.getRadius() * 2, Image.SCALE_DEFAULT));
+                        (int) this.getRadius() * 2, 
+                        (int) this.getRadius() * 2, 
+                        Image.SCALE_DEFAULT));
 
         } catch (Exception e) {
             this.image = null;
@@ -98,6 +108,11 @@ public abstract class CircularObject {
         this.angle = angle;
     }
 
+    /**
+     * Rotates the current sprite towards position x, y relative to current position.
+     * @param posX x position
+     * @param posY y position
+     */
     public void rotateTowards(double posX, double posY) {
         if ((posX - this.getPosX()) < 0) {
             this.setAngle(-Math
@@ -113,6 +128,10 @@ public abstract class CircularObject {
         }
     }
 
+    /**
+     * Sets the imagePath to the location where the sprite is located.
+     * @param imagePath image path
+     */
     public void setImagePath(String imagePath) {
         this.imagePath = imagePath;
         this.setImage();
@@ -127,6 +146,13 @@ public abstract class CircularObject {
     }
 
     // Additional helper methods
+
+    /**
+     * Updates the x and y position of the circular object.
+     * 
+     * @param posX x position
+     * @param posY y position
+     */
     public void setPos(double posX, double posY) {
         this.setPosX(posX);
         this.setPosY(posY);
@@ -140,20 +166,35 @@ public abstract class CircularObject {
         this.setPosY(this.getPosY() + changeY);
     }
 
+    /**
+     * Adds the changeX and changeY to an object's position.
+     * @param changeX change in x direction
+     * @param changeY change in y direction
+     */
     public void addPos(double changeX, double changeY) {
         this.addPosX(changeX);
         this.addPosY(changeY);
     }
 
+    /**
+     * Adds the components of a changeVector to object's position.
+     * @param changeVector 2D Vector with x and y component
+     */
     public void addPos(double[] changeVector) {
         this.addPosX(changeVector[0]);
         this.addPosY(changeVector[1]);
     }
 
+    /**
+     * Computes whether this circular object instance intersects the param circular object.
+     * @param circularObject the circular object to be checked against
+     * @return True if they intersect, false otherwise.
+     */
     public boolean intersects(CircularObject circularObject) {
         double radiiSum = circularObject.radius + this.radius;
         double distanceBetweenCircles = Math.sqrt(
-                Math.pow(circularObject.posX - this.getPosX(), 2) + Math.pow(circularObject.posY - this.getPosY(), 2));
+                Math.pow(circularObject.posX - this.getPosX(), 2) 
+                + Math.pow(circularObject.posY - this.getPosY(), 2));
         return distanceBetweenCircles <= radiiSum;
     }
 
@@ -161,21 +202,29 @@ public abstract class CircularObject {
         return Math.sqrt(Math.pow(x - this.getPosX(), 2) + Math.pow(y - this.getPosY(), 2));
     }
 
+
+    /**
+     * Draws the current object given its state. 
+     * Draws a sprite if path exists otherwise draws circle.
+     * 
+     * @param g Graphics
+     */
     public void draw(Graphics g) {
         BufferedImage image = this.getImage();
         if (image != null) {
             g.drawImage(
-                    ImageHelpers.rotateImage(
-                            ImageHelpers.toBufferedImage(
-                                    this.getImage().getScaledInstance((int) (image.getWidth() * getScaleX()),
-                                            (int) (image.getHeight() * getScaleY()), Image.SCALE_DEFAULT)),
-                            this.getAngle()),
-                    (int) (((this.getPosX() - image.getWidth() / 2)) * getScaleX()),
-                    (int) ((this.getPosY() - image.getHeight() / 2) * getScaleY()), null);
+                ImageHelpers.rotateImage(
+                    ImageHelpers.toBufferedImage(this.getImage().getScaledInstance(
+                        (int) (image.getWidth() * getScaleX()), 
+                        (int) (image.getHeight() * getScaleY()), Image.SCALE_DEFAULT)), 
+                        this.getAngle()),
+                        (int) (((this.getPosX() - image.getWidth() / 2)) * getScaleX()),
+                        (int) ((this.getPosY() - image.getHeight() / 2) * getScaleY()), null);
         } else {
             g.fillOval((int) ((this.getPosX() - this.getRadius()) * getScaleX()),
                     (int) ((this.getPosY() - this.getRadius()) * getScaleY()),
-                    (int) (this.getRadius() * 2 * getScaleX()), (int) (this.getRadius() * 2 * getScaleY()));
+                    (int) (this.getRadius() * 2 * getScaleX()), 
+                    (int) (this.getRadius() * 2 * getScaleY()));
         }
 
     }

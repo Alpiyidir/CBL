@@ -2,6 +2,10 @@ package game.entities.instance;
 
 import game.entities.general.CircularObjectWithUpdate;
 
+/**
+ * Class Player
+ * Contains all methods and variables that is required for a player instance.
+ */
 public class Player extends CircularObjectWithUpdate {
     double health;
     int selectedWeapon;
