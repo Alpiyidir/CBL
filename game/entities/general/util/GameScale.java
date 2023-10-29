@@ -1,4 +1,4 @@
-package game;
+package game.entities.general.util;
 
 public class GameScale {
     private static double scaleX = 1;

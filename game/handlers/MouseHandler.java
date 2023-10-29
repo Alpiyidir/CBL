@@ -1,7 +1,8 @@
 package game.handlers;
 
-import game.GameScale;
 import java.awt.event.*;
+
+import game.entities.general.util.GameScale;
 
 public class MouseHandler implements MouseListener, MouseMotionListener {
     int posX;
