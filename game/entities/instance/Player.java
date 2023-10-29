@@ -13,8 +13,7 @@ public class Player extends CircularObjectWithUpdate {
     long lastVisible;
     long lastBulletTime;
 
-    static final String IMAGE_PATH_WIN = "./CBL/game/entities/instance/sprites/Spaceship.png";
-    static final String IMAGE_PATH_MAC = "game/entities/instance/sprites/Spaceship.png";
+    static final String IMAGE_PATH = "game/entities/instance/sprites/Spaceship.png";
 
     public Player(double posX, double posY, double speed, double radius, double health) {
         super(posX, posY, speed, radius);
@@ -22,8 +21,7 @@ public class Player extends CircularObjectWithUpdate {
         this.selectedWeapon = 0;
         this.isAlive = true;
         this.lastBulletTime = - (long) 1e10;
-        this.setImagePathWin(IMAGE_PATH_WIN);
-        this.setImagePathMac(IMAGE_PATH_MAC);
+        this.setImagePath(IMAGE_PATH);
     }
 
     public double getHealth() {

@@ -11,15 +11,13 @@ public class Enemy extends CircularObject {
     long lastBulletTime = -(long) 1e10;
     boolean isShooter = false;
 
-    static final String IMAGE_PATH_WIN = ".\\CBL\\game\\entities\\instance\\sprites\\SpaceshipNegative.png";
-    static final String IMAGE_PATH_MAC = "game/entities/instance/sprites/SpaceshipNegative.png";
+    static final String IMAGE_PATH = "game/entities/instance/sprites/SpaceshipNegative.png";
 
 
     public Enemy(double xPos, double yPos, double speed, double radius) {
         super(xPos, yPos, speed, radius);
 
-        this.setImagePathWin(IMAGE_PATH_WIN);
-        this.setImagePathMac(IMAGE_PATH_MAC);
+        this.setImagePath(IMAGE_PATH);
 
         Random random = new Random();
         if (random.nextDouble() * 100 > 66.0) {

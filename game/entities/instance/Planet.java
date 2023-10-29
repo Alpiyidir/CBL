@@ -9,14 +9,12 @@ import game.entities.general.CircularObject;
 public class Planet extends CircularObject {
     double health;
 
-    static final String IMAGE_PATH_WIN = ".\\CBL\\game\\entities\\instance\\sprites\\Planet.png";
-    static final String IMAGE_PATH_MAC = "game/entities/instance/sprites/Planet.png";
+    static final String IMAGE_PATH = "game/entities/instance/sprites/Planet.png";
 
     public Planet(double posX, double posY, double speed, double radius, double health) {
         super(posX, posY, speed, radius);
         this.health = health;
-        this.setImagePathWin(IMAGE_PATH_WIN);
-        this.setImagePathMac(IMAGE_PATH_MAC);
+        this.setImagePath(IMAGE_PATH);
     }
 
     public double getHealth() {

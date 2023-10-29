@@ -13,17 +13,11 @@ public abstract class Projectile extends CircularObjectWithUpdate {
     private CircularObject owner;
     private int spriteNumber;
 
-    static final String BLUE_IMAGE_PATH_WIN = 
-        ".\\CBL\\game\\entities\\instance\\sprites\\BlueBullet.png";
-    static final String YELLOW_IMAGE_PATH_WIN = 
-        ".\\CBL\\game\\entities\\instance\\sprites\\YellowBullet.png";
-    static final String RED_IMAGE_PATH_WIN = ".\\CBL\\game\\entities\\instance\\sprites\\RedBullet.png";
-
-    static final String BLUE_IMAGE_PATH_MAC = 
+    static final String BLUE_IMAGE_PATH = 
         "game/entities/instance/sprites/BlueBullet.png";
-    static final String YELLOW_IMAGE_PATH_MAC = 
+    static final String YELLOW_IMAGE_PATH = 
         "game/entities/instance/sprites/YellowBullet.png";
-    static final String RED_IMAGE_PATH_MAC = "game/entities/instance/sprites/RedBullet.png";
+    static final String RED_IMAGE_PATH = "game/entities/instance/sprites/RedBullet.png";
 
     public Projectile(double xPos, double yPos, double speed, double radius, 
             double[] normalizedDirectionVector, CircularObject owner, int spriteNumber) {
@@ -32,15 +26,12 @@ public abstract class Projectile extends CircularObjectWithUpdate {
         this.spriteNumber = spriteNumber;
 
         if (this.getSpriteNumber() == 0) {
-            this.setImagePathWin(BLUE_IMAGE_PATH_WIN);
-            this.setImagePathMac(BLUE_IMAGE_PATH_MAC);
+            this.setImagePath(BLUE_IMAGE_PATH);
 
         } else if (this.getSpriteNumber() == 1) {
-            this.setImagePathWin(YELLOW_IMAGE_PATH_WIN);
-            this.setImagePathMac(YELLOW_IMAGE_PATH_MAC);
+            this.setImagePath(YELLOW_IMAGE_PATH);
         } else if (this.getSpriteNumber() == 2) {
-            this.setImagePathWin(RED_IMAGE_PATH_WIN);
-            this.setImagePathMac(RED_IMAGE_PATH_MAC);
+            this.setImagePath(RED_IMAGE_PATH);
         }
     }
 
