@@ -21,7 +21,8 @@ public abstract class CircularObject {
 
     private double angle;
     private BufferedImage image;
-    private String imagePath;
+    private String imagePathWin;
+    private String imagePathMac;
 
     protected CircularObject(double posX, double posY, double speed, double radius) {
         this.posX = posX;
@@ -64,8 +65,11 @@ public abstract class CircularObject {
         return GameScale.getScaleY();
     }
 
-    public String getImagePath() {
-        return this.imagePath;
+    public String getImagePathWin() {
+        return this.imagePathWin;
+    }
+    public String getImagePathMac() {
+        return this.imagePathMac;
     }
 
     public void setPosX(double xPos) {
@@ -89,17 +93,29 @@ public abstract class CircularObject {
      */
     public void setImage() {
         try {
-            if (this.imagePath == null) {
+            if (this.imagePathWin == null) {
                 throw new Exception();
             }
             this.image = ImageHelpers.toBufferedImage(
-                    ImageIO.read(new File(this.getImagePath())).getScaledInstance(
+                    ImageIO.read(new File(this.getImagePathWin())).getScaledInstance(
                         (int) this.getRadius() * 2, 
                         (int) this.getRadius() * 2, 
                         Image.SCALE_DEFAULT));
 
         } catch (Exception e) {
-            this.image = null;
+            try {
+                if (this.imagePathMac == null) {
+                    throw new Exception();
+                }
+                this.image = ImageHelpers.toBufferedImage(
+                        ImageIO.read(new File(this.getImagePathMac())).getScaledInstance(
+                            (int) this.getRadius() * 2, 
+                            (int) this.getRadius() * 2, 
+                            Image.SCALE_DEFAULT));
+
+            } catch (Exception ec) {
+                this.image = null;
+            }
         }
 
     }
@@ -132,11 +148,15 @@ public abstract class CircularObject {
      * Sets the imagePath to the location where the sprite is located.
      * @param imagePath image path
      */
-    public void setImagePath(String imagePath) {
-        this.imagePath = imagePath;
+    public void setImagePathWin(String imagePath) {
+        this.imagePathWin = imagePath;
         this.setImage();
     }
 
+    public void setImagePathMac(String imagePath) {
+        this.imagePathMac = imagePath;
+        this.setImage();
+    }
     public static void setScaleX(double scaleX) {
         GameScale.setScaleX(scaleX);
     }
