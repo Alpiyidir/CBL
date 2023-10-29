@@ -18,10 +18,13 @@ import javax.swing.*;
 
 public class GamePanel extends JPanel implements Runnable {
     final int framesPerSecond = 60;
-    int horizontalSize = 1280;
-    int verticalSize = 720;
+    double horizontalSize = 1280;
+    double verticalSize = 720;
 
     JButton gameOverButton;
+
+    double scaleX;
+    double scaleY;
 
     Player player;
 
@@ -42,20 +45,21 @@ public class GamePanel extends JPanel implements Runnable {
 
     JTextArea playerHealthTextField;
 
+    JTextArea gameControls;
+
     // Images for the sprites
 
     Thread gameThread;
 
     GamePanel() {
-        this.lastProjectileTime = System.nanoTime();
-
         this.player = new Player(horizontalSize / 2, verticalSize / 2, 2, 20, 5);
         this.playerHealthTextField = new JTextArea("Player health: " + player.getHealth());
 
         this.planet = new Planet(horizontalSize / 2, verticalSize / 2, 0, 40, 50);
         this.planetHealthTextField = new JTextArea("Planet health: " + planet.getHealth());
 
-        this.gameOverButton = new JButton("Game over...", null);
+        this.gameControls = new JTextArea("WASD to move, 1 for machine gun, 2 for rocket launcher, LMB to shoot.");
+        this.gameOverButton = new JButton("You died! Click to try to survive for longer!", null);
 
         this.keyHandler = new KeyHandler();
         this.mouseHandler = new MouseHandler();
@@ -70,6 +74,10 @@ public class GamePanel extends JPanel implements Runnable {
         this.add(playerHealthTextField);
         playerHealthTextField.setEnabled(false);
         playerHealthTextField.setOpaque(false);
+
+        this.add(gameControls);
+        gameControls.setEnabled(false);
+        gameControls.setOpaque(false);
 
         this.setBackground(Color.BLACK);
         this.setFocusable(true);
@@ -102,14 +110,13 @@ public class GamePanel extends JPanel implements Runnable {
                 processInputsThatDontCreateObjects();
                 update(drawInterval);
                 processInputsThatCreateObjects();
+                updateUIElements();
                 repaint();
                 delta--;
             }
         }
 
         if (gameThread.isInterrupted()) {
-            double scaleX = CircularObject.getScaleX();
-            double scaleY = CircularObject.getScaleY();
             System.out.println("Terminated");
             // On termination of GameWindow, this executes
             gameOverButton.setBounds((int) ((horizontalSize / 2 - 400 / 2) * scaleX),
@@ -120,10 +127,11 @@ public class GamePanel extends JPanel implements Runnable {
 
                 @Override
                 public void actionPerformed(ActionEvent e) {
+                    /* 
                     JComponent comp = (JComponent) e.getSource();
                     Window win = SwingUtilities.getWindowAncestor(comp);
                     win.dispose();
-                    new Main().startGame();
+                    new Main().startGame();*/
                 }
             });
             // this.setVisible(false);
@@ -144,6 +152,8 @@ public class GamePanel extends JPanel implements Runnable {
         Rectangle r = SwingUtilities.getWindowAncestor(this).getBounds();
         CircularObject.setScaleX(r.getWidth() / (double) horizontalSize);
         CircularObject.setScaleY(r.getHeight() / (double) verticalSize);
+        scaleX = CircularObject.getScaleX();
+        scaleY = CircularObject.getScaleY();
 
         // Terminate game if health is smaller than or equal to zero
         if (planet.getHealth() <= 0) {
@@ -168,10 +178,10 @@ public class GamePanel extends JPanel implements Runnable {
         double originalPosX = player.getPosX();
         double originalPosY = player.getPosY();
         player.updatePos(drawIntervalMovementModifier);
-        if (player.getPosX() >= horizontalSize - player.getRadius() || player.getPosX() < 0 + player.getRadius()) {
+        if (player.getPosX() >= horizontalSize - player.getRadius() - 15 || player.getPosX() < 0 + player.getRadius()) {
             player.setPosX(originalPosX);
         }
-        if (player.getPosY() >= verticalSize - player.getRadius() || player.getPosY() < 0 + player.getRadius()) {
+        if (player.getPosY() >= verticalSize - player.getRadius() - 35 || player.getPosY() < 0 + player.getRadius()) {
             player.setPosY(originalPosY);
         }
 
@@ -192,7 +202,8 @@ public class GamePanel extends JPanel implements Runnable {
         }
 
         // adding new enemies
-        if (Math.floor(ThreadLocalRandom.current().nextInt(0, (int) (100 * framesPerSecond / 240.0))) == 0  && enemies.size() < 15) {
+        if (Math.floor(ThreadLocalRandom.current().nextInt(0, (int) (100 * framesPerSecond / 240.0))) == 0
+                && enemies.size() < 15) {
 
             // System.out.println("enemy spawned");
             // add enemies randomly to one of the sides of the screen
@@ -201,23 +212,23 @@ public class GamePanel extends JPanel implements Runnable {
             switch (side) {
                 // up
                 case 1:
-                    enemies.add(new Enemy((Math.floor(ThreadLocalRandom.current().nextInt(0, horizontalSize))), 10.0,
+                    enemies.add(new Enemy((Math.floor(ThreadLocalRandom.current().nextInt(0, (int) horizontalSize))), 10.0,
                             5.0, 10));
                     break;
                 // right
                 case 2:
                     enemies.add(new Enemy(horizontalSize - 10,
-                            (Math.floor(ThreadLocalRandom.current().nextInt(0, verticalSize))), 5.0, 10));
+                            (Math.floor(ThreadLocalRandom.current().nextInt(0, (int) verticalSize))), 5.0, 10));
                     break;
                 // down
                 case 3:
-                    enemies.add(new Enemy((Math.floor(ThreadLocalRandom.current().nextInt(0, horizontalSize))),
+                    enemies.add(new Enemy((Math.floor(ThreadLocalRandom.current().nextInt(0, (int) horizontalSize))),
                             verticalSize - 10.0, 5.0, 10));
                     break;
                 // left
                 case 4:
                     enemies.add(
-                            new Enemy(10, (Math.floor(ThreadLocalRandom.current().nextInt(0, verticalSize))), 5.0, 10));
+                            new Enemy(10, (Math.floor(ThreadLocalRandom.current().nextInt(0, (int) verticalSize))), 5.0, 10));
                     break;
                 default:
                     break;
@@ -260,7 +271,6 @@ public class GamePanel extends JPanel implements Runnable {
         // Collision detection between bullets and enemies
         for (int i = 0; i < enemies.size(); i++) {
             boolean enemyHit = false;
-            boolean rocketRemoved = false;
             for (int j = 0; j < bullets.size(); j++) {
                 if (enemies.get(i).intersects(bullets.get(j)) && bullets.get(j).getOwner() != enemies.get(i)) {
                     Bullet currBullet = bullets.get(j);
@@ -282,21 +292,17 @@ public class GamePanel extends JPanel implements Runnable {
                             }
 
                             // Create explosion
-                            explosions
-                                    .add(new Explosion(currBullet.getPosX(), currBullet.getPosY(), 0, explosionRadius));
+                            explosions.add(new Explosion(
+                                    currBullet.getPosX(), currBullet.getPosY(), 0, explosionRadius));
 
                             // Remove rocket
                             bullets.remove(j);
-                            rocketRemoved = true;
+                            enemyHit = true;
                     }
+                }
+                if (enemyHit) {
                     break;
                 }
-                if (rocketRemoved) {
-                    break;
-                }
-            }
-            if (enemyHit) {
-                continue;
             }
         }
 
@@ -348,21 +354,24 @@ public class GamePanel extends JPanel implements Runnable {
         player.setSelectedWeapon(keyHandler.getCurrentWeapon());
     }
 
-    @Override
-    public void paintComponent(Graphics g) {
-        super.paintComponent(g);
-
-        double scaleX = CircularObject.getScaleX();
-        double scaleY = CircularObject.getScaleY();
-
-        // Draw UI elements
+    public void updateUIElements() {
+        // Update UI position
         float scaledFontSize = (float) (30 * scaleX);
         planetHealthTextField.setBounds((int) ((horizontalSize / 2 - 275) * scaleX), (int) (10 * scaleY),
                 (int) (275 * scaleX), (int) (50 * scaleY));
         planetHealthTextField.setFont(planetHealthTextField.getFont().deriveFont(scaledFontSize));
+
         playerHealthTextField.setBounds((int) ((horizontalSize / 2 + 25) * scaleX), (int) (10 * scaleY),
                 (int) (275 * scaleX), (int) (50 * scaleY));
         playerHealthTextField.setFont(playerHealthTextField.getFont().deriveFont(scaledFontSize));
+
+        gameControls.setBounds((int) ((horizontalSize / 2 - 225) * scaleX), (int) ((verticalSize - 100) * (scaleY)), (int) (800 * scaleX), (int) (50 * scaleY));
+        gameControls.setFont(gameControls.getFont().deriveFont(scaledFontSize / 2));
+    }
+
+    @Override
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
 
         // Paint the planet
         planet.draw(g);
