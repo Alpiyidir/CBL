@@ -1,6 +1,6 @@
 package game.entities.general;
 
-import game.GameScale;
+import game.entities.general.util.GameScale;
 import game.util.ImageHelpers;
 import java.awt.Graphics;
 import java.awt.Image;
