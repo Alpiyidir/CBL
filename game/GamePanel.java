@@ -192,7 +192,7 @@ public class GamePanel extends JPanel implements Runnable {
         }
 
         // adding new enemies
-        if (Math.floor(ThreadLocalRandom.current().nextInt(0, 100)) <= 4 * framesPerSecond / 240.0 && enemies.size() < 15) {
+        if (Math.floor(ThreadLocalRandom.current().nextInt(0, (int) (100 * framesPerSecond / 240.0))) == 0  && enemies.size() < 15) {
 
             // System.out.println("enemy spawned");
             // add enemies randomly to one of the sides of the screen
@@ -356,7 +356,7 @@ public class GamePanel extends JPanel implements Runnable {
         double scaleY = CircularObject.getScaleY();
 
         // Draw UI elements
-        float scaledFontSize = (float) (30 * Math.sqrt(Math.pow(scaleX, 2) + Math.pow(scaleY, 2)) / Math.sqrt(2));
+        float scaledFontSize = (float) (30 * scaleX);
         planetHealthTextField.setBounds((int) ((horizontalSize / 2 - 275) * scaleX), (int) (10 * scaleY),
                 (int) (275 * scaleX), (int) (50 * scaleY));
         planetHealthTextField.setFont(planetHealthTextField.getFont().deriveFont(scaledFontSize));
