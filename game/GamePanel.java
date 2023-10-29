@@ -1,7 +1,6 @@
 package game;
 
 import game.entities.general.CircularObject;
-import game.entities.general.Projectile;
 import game.entities.instance.Bullet;
 import game.entities.instance.Enemy;
 import game.entities.instance.Explosion;
@@ -11,28 +10,16 @@ import game.entities.instance.util.ProjectileFactory;
 import game.handlers.KeyHandler;
 import game.handlers.MouseHandler;
 import game.util.MathHelpers;
-
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.geom.AffineTransform;
-import java.awt.image.AffineTransformOp;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
-
 import java.util.concurrent.ThreadLocalRandom;
-
-import javax.imageio.ImageIO;
 import javax.swing.*;
 
 public class GamePanel extends JPanel implements Runnable {
-    final int framesPerSecond = 240;
+    final int framesPerSecond = 60;
     int horizontalSize = 1280;
     int verticalSize = 720;
-
-    double scaleX = 1;
-    double scaleY = 1;
 
     JButton gameOverButton;
 
@@ -78,23 +65,18 @@ public class GamePanel extends JPanel implements Runnable {
 
         this.add(planetHealthTextField);
         planetHealthTextField.setEnabled(false);
-        planetHealthTextField.setBounds(horizontalSize / 2 - 225, 10, 275, 50);
         planetHealthTextField.setOpaque(false);
-        planetHealthTextField.setFont(planetHealthTextField.getFont().deriveFont(30f));
 
         this.add(playerHealthTextField);
         playerHealthTextField.setEnabled(false);
-        playerHealthTextField.setBounds(horizontalSize / 2 + 100, 10, 275, 50);
         playerHealthTextField.setOpaque(false);
-        playerHealthTextField.setFont(playerHealthTextField.getFont().deriveFont(30f));
 
         this.setBackground(Color.BLACK);
         this.setFocusable(true);
         this.setLayout(null);
 
-        gameOverButton.setBounds(horizontalSize / 2 - 400 / 2, verticalSize / 2 - 400 / 2, 400, 400);
-        gameOverButton.setVisible(false);
         this.add(gameOverButton);
+        gameOverButton.setVisible(false);
     }
 
     void startGameThread() {
@@ -110,7 +92,6 @@ public class GamePanel extends JPanel implements Runnable {
         long currentTime;
 
         while (!gameThread.isInterrupted()) {
-
             currentTime = System.nanoTime();
 
             delta += (currentTime - lastTime) / drawInterval;
@@ -127,8 +108,13 @@ public class GamePanel extends JPanel implements Runnable {
         }
 
         if (gameThread.isInterrupted()) {
+            double scaleX = CircularObject.getScaleX();
+            double scaleY = CircularObject.getScaleY();
             System.out.println("Terminated");
             // On termination of GameWindow, this executes
+            gameOverButton.setBounds((int) ((horizontalSize / 2 - 400 / 2) * scaleX),
+                    (int) ((verticalSize / 2 - 400 / 2) * scaleY),
+                    (int) (400 * scaleX), (int) (400 * scaleY));
             gameOverButton.setVisible(true);
             gameOverButton.addActionListener(new ActionListener() {
 
@@ -154,15 +140,10 @@ public class GamePanel extends JPanel implements Runnable {
          */
         final double drawIntervalMovementModifier = drawInterval / Math.pow(10, 7);
 
-        // Resize game
+        // Game scale
         Rectangle r = SwingUtilities.getWindowAncestor(this).getBounds();
-        scaleX = r.width / (double) horizontalSize;
-        scaleY = r.height / (double) verticalSize;
-
-        CircularObject.setScaleX(scaleX);
-        CircularObject.setScaleY(scaleY);
-
-        planet.setPos(planet.getPosX(), planet.getPosY());
+        CircularObject.setScaleX(r.getWidth() / (double) horizontalSize);
+        CircularObject.setScaleY(r.getHeight() / (double) verticalSize);
 
         // Terminate game if health is smaller than or equal to zero
         if (planet.getHealth() <= 0) {
@@ -196,9 +177,6 @@ public class GamePanel extends JPanel implements Runnable {
 
         // Set player angle
         player.rotateTowards(mouseHandler.getX(), mouseHandler.getY());
-
-        // Set current weapon type
-        player.setSelectedWeapon(keyHandler.getCurrentWeapon());
 
         // Bullet movement
         for (int i = 0; i < bullets.size(); i++) {
@@ -304,7 +282,8 @@ public class GamePanel extends JPanel implements Runnable {
                             }
 
                             // Create explosion
-                            explosions.add(new Explosion(currBullet.getPosX(), currBullet.getPosY(), 0, explosionRadius));
+                            explosions
+                                    .add(new Explosion(currBullet.getPosX(), currBullet.getPosY(), 0, explosionRadius));
 
                             // Remove rocket
                             bullets.remove(j);
@@ -361,13 +340,29 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void processInputsThatDontCreateObjects() {
+        // Set movement direction
         this.player.setNormalizedDirectionVector(
                 keyHandler.getNormalizedDirectionVectorFromKeys());
+
+        // Set current weapon type
+        player.setSelectedWeapon(keyHandler.getCurrentWeapon());
     }
 
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
+
+        double scaleX = CircularObject.getScaleX();
+        double scaleY = CircularObject.getScaleY();
+
+        // Draw UI elements
+        float scaledFontSize = (float) (30 * Math.sqrt(Math.pow(scaleX, 2) + Math.pow(scaleY, 2)) / Math.sqrt(2));
+        planetHealthTextField.setBounds((int) ((horizontalSize / 2 - 275) * scaleX), (int) (10 * scaleY),
+                (int) (275 * scaleX), (int) (50 * scaleY));
+        planetHealthTextField.setFont(planetHealthTextField.getFont().deriveFont(scaledFontSize));
+        playerHealthTextField.setBounds((int) ((horizontalSize / 2 + 25) * scaleX), (int) (10 * scaleY),
+                (int) (275 * scaleX), (int) (50 * scaleY));
+        playerHealthTextField.setFont(playerHealthTextField.getFont().deriveFont(scaledFontSize));
 
         // Paint the planet
         planet.draw(g);

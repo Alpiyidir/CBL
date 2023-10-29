@@ -39,9 +39,4 @@ public class Enemy extends CircularObject {
         this.addPosX(normalizedDirectionVector[0] * drawIntervalMovementModifier);
         this.addPosY(normalizedDirectionVector[1] * drawIntervalMovementModifier);
     }
-
-    @Override
-    public String getImagePath() {
-        return IMAGE_PATH;
-    }
 }

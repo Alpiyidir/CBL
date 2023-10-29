@@ -1,17 +1,12 @@
 package game.entities.general;
 
 import game.GameScale;
-
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
+import game.util.ImageHelpers;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
-
 import javax.imageio.ImageIO;
-import game.util.ImageHelpers;
 
 public abstract class CircularObject {
     private double posX;
@@ -28,8 +23,6 @@ public abstract class CircularObject {
         this.posY = posY;
         this.speed = speed;
         this.radius = radius;
-        this.imagePath = this.getImagePath();
-        this.setImage();
     }
 
     // Default getters/setters
@@ -86,7 +79,7 @@ public abstract class CircularObject {
         this.speed = speed;
     }
 
-    private void setImage() {
+    public void setImage() {
         try {
             if (this.imagePath == null) {
                 throw new Exception();
@@ -122,6 +115,7 @@ public abstract class CircularObject {
 
     public void setImagePath(String imagePath) {
         this.imagePath = imagePath;
+        this.setImage();
     }
 
     public static void setScaleX(double scaleX) {
@@ -170,12 +164,17 @@ public abstract class CircularObject {
     public void draw(Graphics g) {
         BufferedImage image = this.getImage();
         if (image != null) {
-            
-            g.drawImage(ImageHelpers.rotateImage(ImageHelpers.toBufferedImage(this.getImage().getScaledInstance((int)(image.getWidth() * getScaleX()), (int)(image.getHeight() * getScaleY()), Image.SCALE_DEFAULT)), this.getAngle()),
+            g.drawImage(
+                    ImageHelpers.rotateImage(
+                            ImageHelpers.toBufferedImage(
+                                    this.getImage().getScaledInstance((int) (image.getWidth() * getScaleX()),
+                                            (int) (image.getHeight() * getScaleY()), Image.SCALE_DEFAULT)),
+                            this.getAngle()),
                     (int) (((this.getPosX() - image.getWidth() / 2)) * getScaleX()),
                     (int) ((this.getPosY() - image.getHeight() / 2) * getScaleY()), null);
         } else {
-            g.fillOval((int) ((this.getPosX() - this.getRadius()) * getScaleX()), (int) ((this.getPosY() - this.getRadius()) * getScaleY()),
+            g.fillOval((int) ((this.getPosX() - this.getRadius()) * getScaleX()),
+                    (int) ((this.getPosY() - this.getRadius()) * getScaleY()),
                     (int) (this.getRadius() * 2 * getScaleX()), (int) (this.getRadius() * 2 * getScaleY()));
         }
 

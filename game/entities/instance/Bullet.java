@@ -1,12 +1,7 @@
 package game.entities.instance;
 
 import game.entities.general.CircularObject;
-import game.entities.general.CircularObjectWithUpdate;
 import game.entities.general.Projectile;
-import game.util.MathHelpers;
-
-import java.awt.Color;
-import java.awt.Graphics;
 
 public class Bullet extends Projectile {
     private int type;

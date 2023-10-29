@@ -12,7 +12,6 @@ class Main {
         JFrame frame = new JFrame("Game Window");
         GamePanel gamePanel = new GamePanel();
 
-        frame.addKeyListener(new KeyHandler());
         frame.add(gamePanel);
         frame.setSize(1280, 720);
         frame.setVisible(true);

@@ -3,7 +3,7 @@ package game.entities.instance;
 import game.entities.general.CircularObjectWithUpdate;
 
 public class Player extends CircularObjectWithUpdate {
-    int health;
+    double health;
     int selectedWeapon;
     boolean isAlive;
     long lastVisible;
@@ -11,15 +11,16 @@ public class Player extends CircularObjectWithUpdate {
 
     static final String IMAGE_PATH = ".\\game\\entities\\instance\\sprites\\Spaceship.png";
 
-    public Player(double posX, double posY, double speed, double radius, int health) {
+    public Player(double posX, double posY, double speed, double radius, double health) {
         super(posX, posY, speed, radius);
         this.health = health;
         this.selectedWeapon = 0;
         this.isAlive = true;
         this.lastBulletTime = - (long) 1e10;
+        this.setImagePath(IMAGE_PATH);
     }
 
-    public int getHealth() {
+    public double getHealth() {
         return this.health;
     }
 
@@ -40,7 +41,7 @@ public class Player extends CircularObjectWithUpdate {
     }
 
 
-    public void setHealth(int health) {
+    public void setHealth(double health) {
         this.health = health;
     }
 
@@ -58,10 +59,5 @@ public class Player extends CircularObjectWithUpdate {
 
     public void setLastBulletTime(long lastBulletTime) {
         this.lastBulletTime = lastBulletTime;
-    }
-
-    @Override
-    public String getImagePath() {
-        return IMAGE_PATH;
     }
 }

@@ -10,6 +10,7 @@ public class Planet extends CircularObject {
     public Planet(double posX, double posY, double speed, double radius, double health) {
         super(posX, posY, speed, radius);
         this.health = health;
+        this.setImagePath(IMAGE_PATH);
     }
 
     public double getHealth() {
@@ -18,10 +19,5 @@ public class Planet extends CircularObject {
 
     public void setHealth(double health) {
         this.health = health;
-    }
-
-    @Override
-    public String getImagePath() {
-        return IMAGE_PATH;
     }
 }

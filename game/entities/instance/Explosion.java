@@ -41,9 +41,4 @@ public class Explosion extends CircularObject {
     public long getTimeElapsedSinceCreation() {
         return System.nanoTime() - this.getTimeCreated();
     }
-
-    @Override
-    public String getImagePath() {
-        return null;
-    }
 }

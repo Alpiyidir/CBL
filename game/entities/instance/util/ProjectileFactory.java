@@ -8,7 +8,6 @@ import game.util.MathHelpers;
 
 public class ProjectileFactory {
     public static Bullet createBullet(Player player, MouseHandler mouseHandler) {
-
         if (System.nanoTime() - 1e8 <= player.getLastBulletTime() && player.getSelectedWeapon() == 0) {
             return null;
         } else if (System.nanoTime() - 5 * 1e8 <= player.getLastBulletTime() && player.getSelectedWeapon() == 1) {
@@ -35,7 +34,7 @@ public class ProjectileFactory {
         Bullet bullet = new Bullet(player.getPosX(), player.getPosY(), speed, 5,
                 MathHelpers.normalizeVector(new double[] { mouseHandler.getX()
                         - player.getPosX(), mouseHandler.getY() - player.getPosY() }),
-                player, 0, player.getSelectedWeapon());
+                player, player.getSelectedWeapon(), player.getSelectedWeapon());
 
         double[] bulletDirectionVector = bullet.getDirectionVector();
 
@@ -55,15 +54,16 @@ public class ProjectileFactory {
     }
 
     public static Bullet createBullet(Enemy enemy, Player player) {
-        if (System.nanoTime() - 9 * 1e8 > enemy.getLastBulletTime() && enemy.getIsShooter()) {
-            enemy.setLastBulletTime(System.nanoTime());
-            Bullet bullet = new Bullet(enemy.getPosX(), enemy.getPosY(), 2.5, 5.0,
-                    MathHelpers.normalizeVector(
-                            new double[] { player.getPosX() - enemy.getPosX(), player.getPosY() - enemy.getPosY() }),
-                    enemy, 1, 0);
-            bullet.rotateTowards(player.getPosX(), player.getPosY());
-            return bullet;
+        if (System.nanoTime() - 9 * 1e8 <= enemy.getLastBulletTime() || !enemy.getIsShooter()) {
+            return null;
         }
-        return null;
+        enemy.setLastBulletTime(System.nanoTime());
+        Bullet bullet = new Bullet(enemy.getPosX(), enemy.getPosY(), 2.5, 5.0,
+                MathHelpers.normalizeVector(
+                        new double[] { player.getPosX() - enemy.getPosX(), player.getPosY() - enemy.getPosY() }),
+                enemy, 2, 0);
+        bullet.rotateTowards(player.getPosX(), player.getPosY());
+        return bullet;
+
     }
 }
