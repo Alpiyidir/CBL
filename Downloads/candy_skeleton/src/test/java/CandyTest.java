@@ -39,9 +39,12 @@ public class CandyTest {
     }
 
     //# BEGIN TODO: Additional test cases
+    @Test
     public void testDivideNotWork() {
         check(3, 16, false);
     }
+    
+    @Test
     public void testDivideByZero() {
         check(0, 14, false);
     }
