@@ -42,6 +42,9 @@ public class CandyTest {
     public void testDivideNotWork() {
         check(3, 16, false);
     }
+    public void testDivideByZero() {
+        check(0, 14, false);
+    }
     //# END TODO
 
 }
